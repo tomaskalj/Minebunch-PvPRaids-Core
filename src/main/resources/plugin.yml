@@ -1,0 +1,4 @@
+name: ${project.name}
+version: ${pluginVersion}
+main: com.minebunch.core.CorePlugin
+load: STARTUP
