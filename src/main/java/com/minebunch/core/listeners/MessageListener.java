@@ -32,11 +32,11 @@ public class MessageListener implements Listener {
 		Player receiver = event.getReceiver();
 		CoreProfile receiverProfile = plugin.getProfileManager().getProfile(receiver.getUniqueId());
 
-		if (senderProfile.hasStaff()) {
-			// NO-OP
-		} else if (!receiverProfile.isMessaging()) {
-			sender.sendMessage(Colors.RED + receiver.getName() + " has messaging disabled.");
-			return;
+		if (!senderProfile.hasStaff()) {
+			if (!receiverProfile.isMessaging()) {
+				sender.sendMessage(Colors.RED + receiver.getName() + " has messaging disabled.");
+				return;
+			}
 		}
 
 		String toMsg = Colors.GRAY + "(To " + receiverProfile.getChatFormat() + Colors.GRAY + ") " + event.getMessage();

@@ -14,7 +14,8 @@ public class HelpOpCommand extends PlayerCommand {
 	public HelpOpCommand(CorePlugin plugin) {
 		super("helpop");
 		this.plugin = plugin;
-		setUsage(Colors.RED + "/helpop <help message>");
+		setAliases("request");
+		setUsage(Colors.RED + "/helpop <request>");
 	}
 
 	@Override
@@ -34,9 +35,9 @@ public class HelpOpCommand extends PlayerCommand {
 
 		String request = StringUtil.buildString(args, 0);
 
-		plugin.getStaffManager().messageStaff(Colors.RED + "\n(HelpOp) " + Colors.SECONDARY + player.getName()
-				+ Colors.PRIMARY + " requested assistance: " + Colors.SECONDARY + request + Colors.PRIMARY + ".\n ");
+		plugin.getStaffManager().messageStaff("\n" + Colors.RED + "[HelpOp] " + Colors.SECONDARY + player.getName()
+				+ Colors.PRIMARY + " requested assistance: " + Colors.SECONDARY + request + Colors.PRIMARY + "." + "\n ");
 
-		player.sendMessage(Colors.GREEN + "Request sent: " + Colors.R + request);
+		player.sendMessage(Colors.GREEN + "Request sent to all online staff members: " + Colors.R + request);
 	}
 }

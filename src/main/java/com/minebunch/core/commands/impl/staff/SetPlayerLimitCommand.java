@@ -30,6 +30,6 @@ public class SetPlayerLimitCommand extends BaseCommand {
 		}
 
 		ServerUtil.setMaxPlayers(Bukkit.getServer(), count);
-		sender.sendMessage(Colors.GREEN + "Player limit  updated to " + count + ".");
+		sender.sendMessage(Colors.GREEN + "Player limit updated to " + count + ".");
 	}
 }

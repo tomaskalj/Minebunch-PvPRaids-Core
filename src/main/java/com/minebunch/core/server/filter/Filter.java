@@ -3,6 +3,7 @@ package com.minebunch.core.server.filter;
 import com.google.common.collect.ImmutableList;
 import java.util.List;
 
+// TODO: load messages from db? improve detection
 public class Filter {
 	private static final List<String> FILTERED_WORDS = ImmutableList.of(
 			"ddos", "dox", "swat", "nigger"

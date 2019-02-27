@@ -34,6 +34,9 @@ public class PlayerListener implements Listener {
 			"bukkit.command.version", "bukkit.command.plugins", "bukkit.command.help", "bukkit.command.tps",
 			"minecraft.command.tell", "minecraft.command.me", "minecraft.command.help"
 	};
+	private static final String[] DISABLED_COMMANDS = {
+			"op"
+	};
 	private final CorePlugin plugin;
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -142,6 +145,7 @@ public class PlayerListener implements Listener {
 		}
 
 		Date today = new Date();
+
 		if (profile.getFirstLogin() == null) {
 			profile.setFirstLogin(today);
 		} else {
@@ -167,14 +171,14 @@ public class PlayerListener implements Listener {
 	}
 
 	private void onDisconnect(Player player) {
-		plugin.getPlayerManager().removePlayer(player);
-
 		CoreProfile profile = plugin.getProfileManager().getProfile(player);
 
 		// in case disconnect is somehow called twice
 		if (profile == null) {
 			return;
 		}
+
+		plugin.getPlayerManager().removePlayer(player);
 
 		if (profile.hasStaff()) {
 			plugin.getStaffManager().removeCachedStaff(profile);
@@ -283,11 +287,19 @@ public class PlayerListener implements Listener {
 	}
 
 	@EventHandler
-	public void onCommand(PlayerCommandPreprocessEvent event) {
-		if (event.getMessage().startsWith("/op")) {
-			event.getPlayer().sendMessage(Colors.RED + "This command is disabled.");
-			event.setCancelled(true);
-			return;
+	public void onBlockCommand(PlayerCommandPreprocessEvent event) {
+		for (String disabledCommand : DISABLED_COMMANDS) {
+			String command = event.getMessage().split(" ")[0].toLowerCase().replace("/", "");
+
+			if (command.contains(":")) {
+				command = command.split(":")[1];
+			}
+
+			if (disabledCommand.equals(command)) {
+				event.setCancelled(true);
+				event.getPlayer().sendMessage(Colors.RED + "This command is disabled.");
+				return;
+			}
 		}
 	}
 

@@ -15,7 +15,7 @@ public class BroadcastCommand extends BaseCommand {
 		super("broadcast", Rank.ADMIN);
 		this.plugin = plugin;
 		setAliases("bc");
-		setUsage(Colors.RED + "Usage: /broadcast <message> [-god]");
+		setUsage(Colors.RED + "Usage: /broadcast <message> [-r]");
 	}
 
 	@Override
@@ -28,8 +28,8 @@ public class BroadcastCommand extends BaseCommand {
 		String message = Colors.RED + "[Alert] " + Colors.R
 				+ ChatColor.translateAlternateColorCodes('&', StringUtil.buildString(args, 0)).trim();
 
-		if (message.endsWith(" -god")) {
-			message = message.substring(12, message.length() - 5).trim();
+		if (message.endsWith(" -r")) {
+			message = message.substring(12, message.length() - 3).trim();
 		}
 
 		plugin.getServer().broadcastMessage(message);

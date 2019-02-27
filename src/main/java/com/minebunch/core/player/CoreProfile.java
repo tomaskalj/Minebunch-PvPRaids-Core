@@ -41,6 +41,7 @@ public class CoreProfile {
 	private boolean vanished;
 	private long lastChatTime;
 
+	// TODO: optimize loading and saving
 	@SuppressWarnings("unchecked")
 	public CoreProfile(String name, UUID id, String address) {
 		this.name = name;
