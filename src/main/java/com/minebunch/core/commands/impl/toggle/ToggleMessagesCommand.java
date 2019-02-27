@@ -21,6 +21,6 @@ public class ToggleMessagesCommand extends PlayerCommand {
 		boolean messaging = !profile.isMessaging();
 
 		profile.setMessaging(messaging);
-		player.sendMessage(messaging ? Colors.GREEN + "Messages enabled." : Colors.RED + "Messages disabled.");
+		player.sendMessage(messaging ? Colors.GREEN + "Strings enabled." : Colors.RED + "Strings disabled.");
 	}
 }

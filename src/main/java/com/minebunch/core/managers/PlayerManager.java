@@ -1,15 +1,15 @@
 package com.minebunch.core.managers;
 
 import java.net.InetAddress;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import org.bukkit.entity.Player;
 
 public class PlayerManager {
 	private final Map<InetAddress, Integer> onlinePerIp = new HashMap<>();
-	private final List<String> onlineNames = new ArrayList<>();
+	private final Set<String> onlineNames = new HashSet<>();
 
 	public void addPlayer(Player player) {
 		onlineNames.add(player.getName());

@@ -5,12 +5,13 @@ import com.minebunch.core.commands.BaseCommand;
 import com.minebunch.core.player.CoreProfile;
 import com.minebunch.core.player.rank.Rank;
 import com.minebunch.core.utils.message.Colors;
+import com.minebunch.core.utils.message.Strings;
 import java.util.Collections;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class ClearChatCommand extends BaseCommand {
-	private static final String BLANK_MESSAGE = String.join("", Collections.nCopies(150, "§8 §8 §1 §3 §3 §7 §8 §r\n"));
+	private static final String BLANK_MESSAGE = String.join("", Collections.nCopies(150, Strings.CRACKED_VAPE_MESSAGE + "\n"));
 	private final CorePlugin plugin;
 
 	public ClearChatCommand(CorePlugin plugin) {
@@ -29,7 +30,9 @@ public class ClearChatCommand extends BaseCommand {
 			}
 		}
 
-		plugin.getServer().broadcastMessage(Colors.GREEN + "The chat was cleared by " + sender.getName() + ".");
+		String name = sender instanceof Player ? ((Player) sender).getDisplayName() : sender.getName();
+
+		plugin.getServer().broadcastMessage(Colors.GREEN + "The chat was cleared by " + name + ".");
 		sender.sendMessage(Colors.YELLOW + "Don't worry, staff can still see cleared messages.");
 	}
 }

@@ -46,6 +46,7 @@ public class VanishCommand extends BaseCommand {
 			}
 
 			String listName = player.getPlayerListName();
+
 			if (listName.contains("*")) {
 				player.setPlayerListName(listName.replace("* ", ""));
 			}

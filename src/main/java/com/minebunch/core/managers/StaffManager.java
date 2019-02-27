@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 
 @RequiredArgsConstructor
 public class StaffManager {
-	private static final String STAFF_PREFIX = Colors.ACCENT + "[Staff] ";
+	private static final String STAFF_PREFIX = Colors.SECONDARY + "[Staff] ";
 	@Getter
 	private final Set<UUID> cachedStaff = new HashSet<>();
 	private final CorePlugin plugin;

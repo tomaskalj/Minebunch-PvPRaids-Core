@@ -16,8 +16,6 @@ import org.bukkit.craftbukkit.v1_8_R3.block.CraftBlock;
 
 /**
  * Represents a cuboid region from one location to another.
- *
- * @skidder Paroxial
  */
 public class Cuboid implements Iterable<Block>, Cloneable, ConfigurationSerializable {
 	private final String worldName;

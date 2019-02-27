@@ -3,7 +3,7 @@ package com.minebunch.core.commands.impl.staff;
 import com.minebunch.core.commands.PlayerCommand;
 import com.minebunch.core.player.rank.Rank;
 import com.minebunch.core.utils.message.Colors;
-import com.minebunch.core.utils.message.Messages;
+import com.minebunch.core.utils.message.Strings;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -23,7 +23,7 @@ public class InvSeeCommand extends PlayerCommand {
 		Player target = Bukkit.getPlayer(args[0]);
 
 		if (target == null) {
-			player.sendMessage(Messages.PLAYER_NOT_FOUND);
+			player.sendMessage(Strings.PLAYER_NOT_FOUND);
 			return;
 		}
 

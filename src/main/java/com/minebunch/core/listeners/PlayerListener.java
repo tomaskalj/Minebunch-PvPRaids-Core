@@ -6,13 +6,10 @@ import com.minebunch.core.event.player.PlayerTagChangeEvent;
 import com.minebunch.core.player.CoreProfile;
 import com.minebunch.core.player.rank.Rank;
 import com.minebunch.core.utils.StringUtil;
-import com.minebunch.core.utils.message.ClickableMessage;
 import com.minebunch.core.utils.message.Colors;
-import com.minebunch.core.utils.message.Messages;
-import com.minebunch.core.utils.player.PlayerUtil;
+import com.minebunch.core.utils.message.Strings;
 import com.minebunch.core.utils.time.TimeUtil;
 import com.minebunch.core.utils.time.timer.Timer;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import lombok.RequiredArgsConstructor;
@@ -87,7 +84,7 @@ public class PlayerListener implements Listener {
 		boolean cleanup = false;
 
 		if (profile == null) {
-			event.disallow(PlayerLoginEvent.Result.KICK_OTHER, Messages.DATA_LOAD_FAIL);
+			event.disallow(PlayerLoginEvent.Result.KICK_OTHER, Strings.DATA_LOAD_FAIL);
 			return;
 		} else if (event.getResult() == PlayerLoginEvent.Result.KICK_FULL) {
 			if (profile.hasDonor()) {
@@ -143,8 +140,6 @@ public class PlayerListener implements Listener {
 		if (profile.hasStaff()) {
 			plugin.getStaffManager().addCachedStaff(profile);
 		}
-
-		PlayerUtil.setPinkName(player, profile.isPinkName());
 
 		Date today = new Date();
 		if (profile.getFirstLogin() == null) {
@@ -277,25 +272,6 @@ public class PlayerListener implements Listener {
 		event.setFormat(profile.getChatFormat() + Colors.R + ": %2$s");
 
 		profile.updateLastChatTime();
-
-		if (profile.getYouTubeUrl() != null) {
-			event.setCancelled(true);
-
-			String rawMessage = event.getFormat().replace("%2$s", event.getMessage());
-			ClickableMessage message = new ClickableMessage(rawMessage);
-
-			message.hoverAll(Colors.GREEN + "Click to view " + player.getDisplayName() + Colors.GREEN + "'s YouTube channel!");
-			message.linkAll(profile.getYouTubeUrl());
-
-			// we must manually log clickable messages as a chat message
-			Calendar calendar = Calendar.getInstance();
-			String time = calendar.get(Calendar.HOUR) + ":" + calendar.get(Calendar.MINUTE) + calendar.get(Calendar.SECOND);
-			plugin.getLogger().info("[" + time + " INFO]: " + rawMessage);
-
-			for (Player recipient : event.getRecipients()) {
-				message.sendToPlayer(recipient);
-			}
-		}
 	}
 
 	@EventHandler

@@ -8,7 +8,7 @@ import com.minebunch.core.player.rank.Rank;
 import com.minebunch.core.storage.database.MongoRequest;
 import com.minebunch.core.utils.ProfileUtil;
 import com.minebunch.core.utils.message.Colors;
-import com.minebunch.core.utils.message.Messages;
+import com.minebunch.core.utils.message.Strings;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -58,7 +58,7 @@ public class RankCommand extends BaseCommand {
 					sender.sendMessage(Colors.GREEN + "Set " + profile.getName() + "'s rank to "
 							+ rank.getColor() + rank.getName() + Colors.GREEN + ".");
 				} else {
-					sender.sendMessage(Messages.PLAYER_NOT_FOUND);
+					sender.sendMessage(Strings.PLAYER_NOT_FOUND);
 				}
 			});
 		} else {

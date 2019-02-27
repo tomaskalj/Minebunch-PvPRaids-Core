@@ -3,7 +3,6 @@ package com.minebunch.core.player;
 import com.minebunch.core.CorePlugin;
 import com.minebunch.core.player.rank.Rank;
 import com.minebunch.core.storage.database.MongoRequest;
-import com.minebunch.core.utils.message.Colors;
 import com.minebunch.core.utils.time.timer.Timer;
 import com.minebunch.core.utils.time.timer.impl.DoubleTimer;
 import com.minebunch.core.utils.time.timer.impl.IntegerTimer;
@@ -30,7 +29,6 @@ public class CoreProfile {
 	private Rank rank = Rank.MEMBER;
 	private Rank tag;
 	private UUID converser;
-	private String youTubeUrl;
 	private Location lastLocation;
 	private Date firstLogin;
 	private Date lastLogin;
@@ -41,7 +39,6 @@ public class CoreProfile {
 	private boolean globalChatEnabled = true;
 	private boolean inStaffChat;
 	private boolean vanished;
-	private boolean pinkName;
 	private long lastChatTime;
 
 	@SuppressWarnings("unchecked")
@@ -55,8 +52,6 @@ public class CoreProfile {
 				this.inStaffChat = document.getBoolean("staff_chat_enabled", inStaffChat);
 				this.messaging = document.getBoolean("messaging_enabled", messaging);
 				this.playingSounds = document.getBoolean("playing_sounds", playingSounds);
-				this.pinkName = document.getBoolean("pink_name", pinkName);
-				this.youTubeUrl = document.getString("youtube_url");
 
 				String tagName = document.getString("tag_name");
 
@@ -105,8 +100,6 @@ public class CoreProfile {
 				.put("staff_chat_enabled", inStaffChat)
 				.put("messaging_enabled", messaging)
 				.put("playing_sounds", playingSounds)
-				.put("pink_name", pinkName)
-				.put("youtube_url", youTubeUrl)
 				.put("rank_name", rank.name())
 				.put("ignored_ids", ignored)
 				.put("known_addresses", knownAddresses)
@@ -135,8 +128,7 @@ public class CoreProfile {
 
 	public String getChatFormat() {
 		String rankColor = getVisibleRank().getColor();
-
-		return pinkName ? Colors.PINK + name : String.format(getVisibleRank().getRawFormat(), rankColor) + name;
+		return String.format(getVisibleRank().getRawFormat(), rankColor) + name;
 	}
 
 	public Rank getVisibleRank() {

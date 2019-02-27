@@ -6,7 +6,7 @@ import com.minebunch.core.event.player.PlayerMessageEvent;
 import com.minebunch.core.player.CoreProfile;
 import com.minebunch.core.utils.StringUtil;
 import com.minebunch.core.utils.message.Colors;
-import com.minebunch.core.utils.message.Messages;
+import com.minebunch.core.utils.message.Strings;
 import org.bukkit.entity.Player;
 
 public class MessageCommand extends PlayerCommand {
@@ -29,7 +29,7 @@ public class MessageCommand extends PlayerCommand {
 		Player target = plugin.getServer().getPlayer(args[0]);
 
 		if (target == null) {
-			player.sendMessage(Messages.PLAYER_NOT_FOUND);
+			player.sendMessage(Strings.PLAYER_NOT_FOUND);
 			return;
 		}
 

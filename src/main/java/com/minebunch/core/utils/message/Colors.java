@@ -1,11 +1,10 @@
 package com.minebunch.core.utils.message;
 
 import lombok.experimental.UtilityClass;
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 
 /*
- * ChatColors as Strings for easy concatenation + more useful strings.
+ * ChatColors as Strings for easy concatenation.
  */
 @UtilityClass
 public class Colors {
@@ -34,6 +33,4 @@ public class Colors {
 	public final String PRIMARY = GRAY;
 	public final String SECONDARY = GOLD;
 	public final String ACCENT = YELLOW;
-	public final String SPLITTER = "┃";
-	public final String SEPARATOR = GRAY + S + StringUtils.repeat("-", 23);
 }

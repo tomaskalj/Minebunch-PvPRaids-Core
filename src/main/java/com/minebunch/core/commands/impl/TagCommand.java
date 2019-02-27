@@ -14,7 +14,7 @@ public class TagCommand extends PlayerCommand {
 	private final CorePlugin plugin;
 
 	public TagCommand(CorePlugin plugin) {
-		super("tag", Rank.MOD);
+		super("tag");
 		this.plugin = plugin;
 		setUsage(Colors.RED + "Usage: /tag <rank|reset>");
 	}

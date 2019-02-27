@@ -1,6 +1,5 @@
 package com.minebunch.core;
 
-import com.minebunch.core.commands.impl.ChannelCommand;
 import com.minebunch.core.commands.impl.HelpOpCommand;
 import com.minebunch.core.commands.impl.IgnoreCommand;
 import com.minebunch.core.commands.impl.ListCommand;
@@ -17,9 +16,7 @@ import com.minebunch.core.commands.impl.staff.GameModeCommand;
 import com.minebunch.core.commands.impl.staff.HealCommand;
 import com.minebunch.core.commands.impl.staff.InvSeeCommand;
 import com.minebunch.core.commands.impl.staff.MuteChatCommand;
-import com.minebunch.core.commands.impl.staff.PinkNameCommand;
 import com.minebunch.core.commands.impl.staff.RankCommand;
-import com.minebunch.core.commands.impl.staff.RanksCommand;
 import com.minebunch.core.commands.impl.staff.SetPlayerLimitCommand;
 import com.minebunch.core.commands.impl.staff.ShutdownCommand;
 import com.minebunch.core.commands.impl.staff.SlowChatCommand;
@@ -40,7 +37,6 @@ import com.minebunch.core.managers.StaffManager;
 import com.minebunch.core.server.filter.Filter;
 import com.minebunch.core.storage.database.MongoStorage;
 import com.minebunch.core.task.BroadcastTask;
-import com.minebunch.core.task.HighRollerTask;
 import com.minebunch.core.utils.message.Colors;
 import com.minebunch.core.utils.structure.Cuboid;
 import java.lang.reflect.Field;
@@ -95,11 +91,9 @@ public class CorePlugin extends JavaPlugin {
 				new ToggleMessagesCommand(this), new ToggleGlobalChat(this), new ToggleSoundsCommand(this),
 				new VanishCommand(this), new ReportCommand(this), new HelpOpCommand(this),
 				new PingCommand(), new MuteChatCommand(this), new SlowChatCommand(this),
-				new GameModeCommand(this), new ShutdownCommand(this), new ChannelCommand(this),
-				new TagCommand(this), new TpPosCommand(), new HealCommand(),
-				new FeedCommand(), new SpeedCommand(), new InvSeeCommand(),
-				new RanksCommand(), new SetPlayerLimitCommand(), new BackCommand(this),
-				new PinkNameCommand(this)
+				new GameModeCommand(this), new ShutdownCommand(this), new TagCommand(this),
+				new TpPosCommand(), new HealCommand(), new FeedCommand(), new SpeedCommand(), new InvSeeCommand(),
+				new SetPlayerLimitCommand(), new BackCommand(this)
 		);
 		registerListeners(
 				new PlayerListener(this), new MessageListener(this)
@@ -107,7 +101,6 @@ public class CorePlugin extends JavaPlugin {
 
 		BukkitScheduler scheduler = getServer().getScheduler();
 
-		scheduler.runTaskTimerAsynchronously(this, new HighRollerTask(this), 5 * 20 * 60L, 5 * 20 * 60L);
 		scheduler.runTaskTimerAsynchronously(this, new BroadcastTask(this), 20 * 60L, 20 * 60L);
 		scheduler.runTaskLater(this, () -> isServerEnabled = true, 20 * 3L);
 	}

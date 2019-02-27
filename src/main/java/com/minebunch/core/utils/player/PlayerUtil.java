@@ -1,8 +1,5 @@
 package com.minebunch.core.utils.player;
 
-import com.minebunch.core.CorePlugin;
-import com.minebunch.core.player.CoreProfile;
-import com.minebunch.core.utils.message.Colors;
 import lombok.experimental.UtilityClass;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import org.bukkit.Bukkit;
@@ -44,16 +41,5 @@ public class PlayerUtil {
 
 	public static int getPing(Player player) {
 		return ((CraftPlayer) player).getHandle().ping;
-	}
-
-	public static void setPinkName(Player player, boolean on) {
-		CoreProfile profile = CorePlugin.getInstance().getProfileManager().getProfile(player);
-
-		if (on) {
-			player.setPlayerListName(Colors.PINK + player.getName());
-			player.setDisplayName(Colors.PINK + player.getName());
-		} else {
-			profile.getVisibleRank().apply(player);
-		}
 	}
 }

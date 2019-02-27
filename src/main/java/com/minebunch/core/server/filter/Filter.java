@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Filter {
 	private static final List<String> FILTERED_WORDS = ImmutableList.of(
-			"ddos", "dox", "swat"
+			"ddos", "dox", "swat", "nigger"
 	);
 
 	public boolean isFiltered(String msg) {

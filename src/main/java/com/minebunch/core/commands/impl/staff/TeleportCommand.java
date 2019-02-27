@@ -5,7 +5,7 @@ import com.minebunch.core.commands.PlayerCommand;
 import com.minebunch.core.player.CoreProfile;
 import com.minebunch.core.player.rank.Rank;
 import com.minebunch.core.utils.message.Colors;
-import com.minebunch.core.utils.message.Messages;
+import com.minebunch.core.utils.message.Strings;
 import org.bukkit.entity.Player;
 
 public class TeleportCommand extends PlayerCommand {
@@ -20,7 +20,7 @@ public class TeleportCommand extends PlayerCommand {
 
 	private static boolean isOffline(Player checker, Player target) {
 		if (target == null) {
-			checker.sendMessage(Messages.PLAYER_NOT_FOUND);
+			checker.sendMessage(Strings.PLAYER_NOT_FOUND);
 			return true;
 		}
 
@@ -29,12 +29,12 @@ public class TeleportCommand extends PlayerCommand {
 
 	private void teleport(Player to, Player from) {
 		to.teleport(from);
-		to.sendMessage(Colors.GREEN + "You have been teleported to " + from.getName() + ".");
+		to.sendMessage(Colors.GREEN + "You have been teleported to " + from.getDisplayName() + Colors.GREEN + ".");
 
 		CoreProfile fromProfile = plugin.getProfileManager().getProfile(from.getUniqueId());
 
 		if (fromProfile.hasStaff()) {
-			from.sendMessage(Colors.GREEN + to.getName() + " has been teleported to you.");
+			from.sendMessage(to.getDisplayName() + Colors.GREEN + " has been teleported to you.");
 		}
 	}
 
@@ -62,7 +62,7 @@ public class TeleportCommand extends PlayerCommand {
 
 			teleport(target, target2);
 
-			player.sendMessage(Colors.GREEN + "Teleported " + target.getName() + " to " + target2.getName() + ".");
+			player.sendMessage(Colors.GREEN + "Teleported " + target.getDisplayName() + Colors.GREEN + " to " + target2.getDisplayName() + Colors.GREEN + ".");
 		}
 	}
 }

@@ -13,8 +13,7 @@ public enum Rank {
 	ADMIN("Admin", Colors.RED),
 	MOD("Mod", Colors.PURPLE),
 	MEDIA("Media", Colors.PINK),
-	HIGHROLLER("HighRoller", Colors.PURPLE + "[HighRoller] %s", Colors.GOLD + Colors.I),
-	PRO("Pro", Colors.GOLD),
+	SPONSOR("Sponsor", Colors.GOLD),
 	MVP("MVP", Colors.BLUE),
 	VIP("VIP", Colors.GREEN),
 	MEMBER("Member", Colors.WHITE);

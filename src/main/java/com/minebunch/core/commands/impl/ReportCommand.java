@@ -5,7 +5,7 @@ import com.minebunch.core.commands.PlayerCommand;
 import com.minebunch.core.player.CoreProfile;
 import com.minebunch.core.utils.StringUtil;
 import com.minebunch.core.utils.message.Colors;
-import com.minebunch.core.utils.message.Messages;
+import com.minebunch.core.utils.message.Strings;
 import com.minebunch.core.utils.time.timer.Timer;
 import org.bukkit.entity.Player;
 
@@ -28,7 +28,7 @@ public class ReportCommand extends PlayerCommand {
 		Player target = plugin.getServer().getPlayer(args[0]);
 
 		if (target == null) {
-			player.sendMessage(Messages.PLAYER_NOT_FOUND);
+			player.sendMessage(Strings.PLAYER_NOT_FOUND);
 			return;
 		}
 
@@ -40,8 +40,7 @@ public class ReportCommand extends PlayerCommand {
 		CoreProfile targetProfile = plugin.getProfileManager().getProfile(target.getUniqueId());
 
 		if (targetProfile.hasStaff()) {
-			player.sendMessage(Colors.RED + "You can't report a staff member. If this staff member is harassing you or" +
-					" engaging in other abusive manners, please report this or contact a higher staff member.");
+			player.sendMessage(Colors.RED + "You can't report a staff members. Contact a higher-ranked staff member to report them.");
 			return;
 		}
 
@@ -56,7 +55,7 @@ public class ReportCommand extends PlayerCommand {
 		String report = StringUtil.buildString(args, 1);
 
 		plugin.getStaffManager().messageStaff("");
-		plugin.getStaffManager().messageStaff(Colors.RED + "(Report) " + Colors.SECONDARY + player.getName() + Colors.PRIMARY
+		plugin.getStaffManager().messageStaff(Colors.RED + "[Report] " + Colors.SECONDARY + player.getName() + Colors.PRIMARY
 				+ " reported " + Colors.SECONDARY + target.getName() + Colors.PRIMARY + " for " + Colors.SECONDARY + report + Colors.PRIMARY + ".");
 		plugin.getStaffManager().messageStaff("");
 
