@@ -2,9 +2,11 @@ package com.minebunch.core.commands.impl.staff;
 
 import com.minebunch.core.CorePlugin;
 import com.minebunch.core.commands.PlayerCommand;
+import com.minebunch.core.jedis.JsonMessageType;
 import com.minebunch.core.player.CoreProfile;
 import com.minebunch.core.player.rank.Rank;
 import com.minebunch.core.utils.StringUtil;
+import com.minebunch.core.utils.json.JsonChain;
 import com.minebunch.core.utils.message.Colors;
 import org.bukkit.entity.Player;
 
@@ -30,7 +32,13 @@ public class StaffChatCommand extends PlayerCommand {
 		} else {
 			String message = StringUtil.buildString(args, 0);
 
-			plugin.getStaffManager().messageStaff(profile.getChatFormat(), message);
+			CorePlugin.getInstance().getJedisManager().write(JsonMessageType.STAFF_CHAT,
+					new JsonChain()
+							.addProperty("server_name", CorePlugin.getInstance().getServerName())
+							.addProperty("player_rank", profile.getRank().getName())
+							.addProperty("player_name", player.getName())
+							.addProperty("message", message)
+							.get());
 		}
 	}
 }

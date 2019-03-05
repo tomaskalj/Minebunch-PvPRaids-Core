@@ -3,9 +3,11 @@ package com.minebunch.core.listeners;
 import com.minebunch.core.CorePlugin;
 import com.minebunch.core.event.player.PlayerRankChangeEvent;
 import com.minebunch.core.event.player.PlayerTagChangeEvent;
+import com.minebunch.core.jedis.JsonMessageType;
 import com.minebunch.core.player.CoreProfile;
 import com.minebunch.core.player.rank.Rank;
 import com.minebunch.core.utils.StringUtil;
+import com.minebunch.core.utils.json.JsonChain;
 import com.minebunch.core.utils.message.Colors;
 import com.minebunch.core.utils.message.Strings;
 import com.minebunch.core.utils.time.TimeUtil;
@@ -166,7 +168,12 @@ public class PlayerListener implements Listener {
 		plugin.getStaffManager().hideVanishedStaffFromPlayer(player);
 
 		if (profile.hasStaff()) {
-			plugin.getStaffManager().messageStaffWithPrefix(profile.getChatFormat() + Colors.PRIMARY + " joined the server.");
+			CorePlugin.getInstance().getJedisManager().write(JsonMessageType.STAFF_JOIN,
+					new JsonChain()
+							.addProperty("player_rank", profile.getRank().getName())
+							.addProperty("player_name", player.getName())
+							.addProperty("server_name", CorePlugin.getInstance().getServerName())
+							.get());
 		}
 	}
 
@@ -239,7 +246,13 @@ public class PlayerListener implements Listener {
 			}
 		} else if (profile.isInStaffChat()) {
 			event.setCancelled(true);
-			plugin.getStaffManager().messageStaff(profile.getChatFormat(), msg);
+			CorePlugin.getInstance().getJedisManager().write(JsonMessageType.STAFF_CHAT,
+					new JsonChain()
+							.addProperty("server_name", CorePlugin.getInstance().getServerName())
+							.addProperty("player_rank", profile.getRank().getName())
+							.addProperty("player_name", player.getName())
+							.addProperty("message", msg)
+							.get());
 			return;
 		}
 

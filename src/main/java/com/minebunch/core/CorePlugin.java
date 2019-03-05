@@ -28,6 +28,7 @@ import com.minebunch.core.commands.impl.staff.VanishCommand;
 import com.minebunch.core.commands.impl.toggle.ToggleGlobalChat;
 import com.minebunch.core.commands.impl.toggle.ToggleMessagesCommand;
 import com.minebunch.core.commands.impl.toggle.ToggleSoundsCommand;
+import com.minebunch.core.jedis.JedisManager;
 import com.minebunch.core.listeners.MessageListener;
 import com.minebunch.core.listeners.PlayerListener;
 import com.minebunch.core.managers.PlayerManager;
@@ -37,6 +38,8 @@ import com.minebunch.core.managers.StaffManager;
 import com.minebunch.core.server.filter.Filter;
 import com.minebunch.core.storage.database.MongoStorage;
 import com.minebunch.core.task.BroadcastTask;
+import com.minebunch.core.utils.config.ConfigReader;
+import com.minebunch.core.utils.config.FileConfig;
 import com.minebunch.core.utils.message.Colors;
 import com.minebunch.core.utils.structure.Cuboid;
 import java.lang.reflect.Field;
@@ -63,6 +66,10 @@ public class CorePlugin extends JavaPlugin {
 	private StaffManager staffManager;
 	private PlayerManager playerManager;
 	private ServerManager serverManager;
+	private JedisManager jedisManager;
+
+	private FileConfig config;
+	private String serverName;
 
 	private static void registerSerializableClass(Class<?> clazz) {
 		if (ConfigurationSerializable.class.isAssignableFrom(clazz)) {
@@ -83,6 +90,10 @@ public class CorePlugin extends JavaPlugin {
 		staffManager = new StaffManager(this);
 		playerManager = new PlayerManager();
 		serverManager = new ServerManager();
+		jedisManager = new JedisManager();
+
+		config = new FileConfig(this, "config.yml");
+		serverName = new ConfigReader(config, null).getString("server.name");
 
 		registerCommands(
 				new BroadcastCommand(this), new ClearChatCommand(this), new IgnoreCommand(this),
