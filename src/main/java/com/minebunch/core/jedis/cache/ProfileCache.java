@@ -19,7 +19,6 @@ public class ProfileCache implements JedisCache<UUID, CoreProfile>{
 
         // Use an atomic string here because a different thread is being used to get the name
         AtomicString atomic = new AtomicString();
-
         CorePlugin.getInstance().getJedisManager().runCommand(redis -> {
             atomic.setString(redis.hget("profile", uuid.toString()));
         });

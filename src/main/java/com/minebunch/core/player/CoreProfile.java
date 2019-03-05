@@ -31,7 +31,6 @@ public class CoreProfile implements Serializable{
 	private Date firstLogin;
 	private Date lastLogin;
 
-
 	private boolean playingSounds = true;
 	private boolean messaging = true;
 	private boolean globalChatEnabled = true;
