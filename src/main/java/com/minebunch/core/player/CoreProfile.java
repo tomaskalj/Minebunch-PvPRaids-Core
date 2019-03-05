@@ -6,6 +6,8 @@ import com.minebunch.core.storage.database.MongoRequest;
 import com.minebunch.core.utils.time.timer.Timer;
 import com.minebunch.core.utils.time.timer.impl.DoubleTimer;
 import com.minebunch.core.utils.time.timer.impl.IntegerTimer;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,29 +19,33 @@ import org.bukkit.Location;
 
 @Setter
 @Getter
-public class CoreProfile {
+public class CoreProfile implements Serializable{
 	private final List<UUID> ignored = new ArrayList<>();
 	private final List<String> knownAddresses = new ArrayList<>();
 
 	private final String name;
 	private final UUID id;
-	private final Timer commandCooldownTimer = new DoubleTimer(1);
-	private final Timer reportCooldownTimer = new IntegerTimer(TimeUnit.SECONDS, 60);
 
 	private Rank rank = Rank.MEMBER;
 	private Rank tag;
-	private UUID converser;
-	private Location lastLocation;
 	private Date firstLogin;
 	private Date lastLogin;
-	private Timer chatCooldownTimer;
+
 
 	private boolean playingSounds = true;
 	private boolean messaging = true;
 	private boolean globalChatEnabled = true;
 	private boolean inStaffChat;
-	private boolean vanished;
-	private long lastChatTime;
+
+	private transient UUID converser;
+	private transient Location lastLocation;
+	private transient boolean vanished;
+
+	private transient final Timer commandCooldownTimer = new DoubleTimer(1);
+	private transient final Timer reportCooldownTimer = new IntegerTimer(TimeUnit.SECONDS, 60);
+
+	private transient long lastChatTime;
+	private transient Timer chatCooldownTimer;
 
 	// TODO: optimize loading and saving
 	@SuppressWarnings("unchecked")

@@ -2,6 +2,7 @@ package com.minebunch.core.jedis;
 
 import com.google.gson.JsonObject;
 import com.minebunch.core.CorePlugin;
+import com.minebunch.core.jedis.json.JsonPayloadType;
 import com.minebunch.core.jedis.pubsub.JedisPublisher;
 import com.minebunch.core.jedis.pubsub.JedisSubscriber;
 import com.minebunch.core.jedis.pubsub.JedisSubscriptionHandler;
@@ -35,7 +36,7 @@ public class JedisManager {
         }
     }
 
-    public void write(JsonMessageType payload, JsonObject data) {
+    public void write(JsonPayloadType payload, JsonObject data) {
         JsonObject object = new JsonObject();
 
         object.addProperty("payload", payload.name());

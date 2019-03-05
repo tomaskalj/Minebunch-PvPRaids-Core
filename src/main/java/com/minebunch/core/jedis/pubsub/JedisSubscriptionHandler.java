@@ -2,16 +2,19 @@ package com.minebunch.core.jedis.pubsub;
 
 import com.google.gson.JsonObject;
 import com.minebunch.core.CorePlugin;
-import com.minebunch.core.jedis.JsonMessageType;
+import com.minebunch.core.event.player.PlayerTagChangeEvent;
+import com.minebunch.core.jedis.json.JsonMessages;
+import com.minebunch.core.jedis.json.JsonPayloadType;
 import com.minebunch.core.player.rank.Rank;
+import com.minebunch.core.utils.message.Colors;
 
 public class JedisSubscriptionHandler {
 
     public void processJson(JsonObject json){
-        JsonMessageType type;
+        JsonPayloadType type;
 
         try{
-            type = JsonMessageType.valueOf(json.get("type").getAsString());
+            type = JsonPayloadType.valueOf(json.get("type").getAsString());
         }catch (IllegalArgumentException e){
             CorePlugin.getInstance().getLogger().warning("Could not parse an incoming Json object!");
             return;
@@ -32,7 +35,7 @@ public class JedisSubscriptionHandler {
                     return;
                 }
 
-                String message = type.getTemplate()
+                String message = JsonMessages.STAFF_CHAT
                         .replace("{server_name}", serverName)
                         .replace("{player_rank_colour}", rank.getColor())
                         .replace("{player_name}", playerName)
@@ -52,12 +55,16 @@ public class JedisSubscriptionHandler {
                     return;
                 }
 
-                String message = type.getTemplate()
+                String message = JsonMessages.STAFF_JOIN
                         .replace("{server_name}", serverName)
                         .replace("{player_rank_colour}", rank.getColor())
                         .replace("{player_name}", playerName);
 
                 CorePlugin.getInstance().getStaffManager().messageStaff(message);
+            }
+
+            case RANK_CHANGE: {
+
             }
         }
     }

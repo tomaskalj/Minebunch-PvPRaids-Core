@@ -2,7 +2,7 @@ package com.minebunch.core.commands.impl.staff;
 
 import com.minebunch.core.CorePlugin;
 import com.minebunch.core.commands.PlayerCommand;
-import com.minebunch.core.jedis.JsonMessageType;
+import com.minebunch.core.jedis.json.JsonPayloadType;
 import com.minebunch.core.player.CoreProfile;
 import com.minebunch.core.player.rank.Rank;
 import com.minebunch.core.utils.StringUtil;
@@ -32,7 +32,7 @@ public class StaffChatCommand extends PlayerCommand {
 		} else {
 			String message = StringUtil.buildString(args, 0);
 
-			CorePlugin.getInstance().getJedisManager().write(JsonMessageType.STAFF_CHAT,
+			CorePlugin.getInstance().getJedisManager().write(JsonPayloadType.STAFF_CHAT,
 					new JsonChain()
 							.addProperty("server_name", CorePlugin.getInstance().getServerName())
 							.addProperty("player_rank", profile.getRank().getName())
