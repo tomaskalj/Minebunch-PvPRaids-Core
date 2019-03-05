@@ -12,6 +12,7 @@ import redis.clients.jedis.JedisPool;
 
 @Getter
 public class JedisManager {
+
     private JedisSettings settings;
     private JedisPool pool;
     private JedisPublisher publisher;
