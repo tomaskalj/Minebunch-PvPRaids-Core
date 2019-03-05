@@ -98,6 +98,7 @@ public class CoreProfile {
 	public void save(boolean async) {
 		MongoRequest request = MongoRequest.newRequest("players", id)
 				.put("name", name)
+				.put("lowername", name.toLowerCase())
 				.put("staff_chat_enabled", inStaffChat)
 				.put("messaging_enabled", messaging)
 				.put("playing_sounds", playingSounds)
