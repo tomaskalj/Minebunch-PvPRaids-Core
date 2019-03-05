@@ -5,7 +5,7 @@ import com.minebunch.core.CorePlugin;
 import com.minebunch.core.jedis.pubsub.JedisPublisher;
 import com.minebunch.core.jedis.pubsub.JedisSubscriber;
 import com.minebunch.core.jedis.pubsub.JedisSubscriptionHandler;
-import com.minebunch.core.utils.config.ConfigReader;
+import com.minebunch.core.storage.flatfile.Config;
 import lombok.Getter;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -19,11 +19,11 @@ public class JedisManager {
     private JedisSubscriber subscriber;
 
     public JedisManager(){
-        ConfigReader reader = new ConfigReader(CorePlugin.getInstance().getConfig(), null);
+        Config config = CorePlugin.getInstance().getConfig();
 
-        String host = reader.getString("redis.host");
-        int port = reader.getInt("redis.port");
-        String password = reader.getString("redis.password");
+        String host = config.getString("redis.host");
+        int port = config.getInt("redis.port");
+        String password = config.getString("redis.password");
 
         settings = new JedisSettings(host, port, password);
         pool = new JedisPool(settings.getAddress(), settings.getPort());

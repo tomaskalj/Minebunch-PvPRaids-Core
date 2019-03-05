@@ -37,9 +37,8 @@ import com.minebunch.core.managers.ServerManager;
 import com.minebunch.core.managers.StaffManager;
 import com.minebunch.core.server.filter.Filter;
 import com.minebunch.core.storage.database.MongoStorage;
+import com.minebunch.core.storage.flatfile.Config;
 import com.minebunch.core.task.BroadcastTask;
-import com.minebunch.core.utils.config.ConfigReader;
-import com.minebunch.core.utils.config.FileConfig;
 import com.minebunch.core.utils.message.Colors;
 import com.minebunch.core.utils.structure.Cuboid;
 import java.lang.reflect.Field;
@@ -68,7 +67,7 @@ public class CorePlugin extends JavaPlugin {
 	private ServerManager serverManager;
 	private JedisManager jedisManager;
 
-	private FileConfig config;
+	private Config config;
 	private String serverName;
 
 	private static void registerSerializableClass(Class<?> clazz) {
@@ -84,6 +83,9 @@ public class CorePlugin extends JavaPlugin {
 
 		registerSerializableClass(Cuboid.class);
 
+		config = new Config(this, "config.yml");
+		serverName = config.getString("server.name");
+
 		filter = new Filter();
 		mongoStorage = new MongoStorage();
 		profileManager = new ProfileManager();
@@ -91,9 +93,6 @@ public class CorePlugin extends JavaPlugin {
 		playerManager = new PlayerManager();
 		serverManager = new ServerManager();
 		jedisManager = new JedisManager();
-
-		config = new FileConfig(this, "config.yml");
-		serverName = new ConfigReader(config, null).getString("server.name");
 
 		registerCommands(
 				new BroadcastCommand(this), new ClearChatCommand(this), new IgnoreCommand(this),
