@@ -15,7 +15,6 @@ import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-@Deprecated
 @UtilityClass
 public final class ProfileUtil {
 	private static final String API_URL = "https://api.mojang.com/users/profiles/minecraft/";

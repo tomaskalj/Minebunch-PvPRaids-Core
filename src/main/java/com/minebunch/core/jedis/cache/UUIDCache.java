@@ -1,6 +1,7 @@
 package com.minebunch.core.jedis.cache;
 
 import com.minebunch.core.CorePlugin;
+import com.minebunch.core.utils.ProfileUtil;
 import com.minebunch.core.utils.data.AtomicString;
 import org.bukkit.Bukkit;
 
@@ -21,8 +22,23 @@ public class UUIDCache implements JedisCache<String, UUID>{
             return uuidToName.get(uuid);
         }
 
-        // TODO: Fetch from Redis, if not present fetch from Mojang API
-        return "Unknown";
+        // Use an atomic string here because a different thread is being used to get the name
+        AtomicString atomic = new AtomicString();
+        CorePlugin.getInstance().getJedisManager().runCommand((redis) -> {
+            atomic.setString(redis.hget("uuid-to-name", uuid.toString()));
+        });
+
+        // If Redis does not have uuid cached, try to look through the Mojang API. Else return the result from Redis
+        if (atomic.getString() == null) {
+            ProfileUtil.MojangProfile mojangProfile = ProfileUtil.lookupProfile(uuid);
+            if (mojangProfile != null){
+                return mojangProfile.getName();
+            }else{
+                return "Unknown";
+            }
+        } else {
+            return atomic.getString();
+        }
     }
 
     private void startRunnable(){
@@ -49,8 +65,14 @@ public class UUIDCache implements JedisCache<String, UUID>{
             atomic.setString(redis.hget("name-to-uuid", name.toLowerCase()));
         });
 
+        // If Redis does not have name cached, try to look through the Mojang API. Else return the result from Redis
         if (atomic.getString() == null) {
-            return null;
+            ProfileUtil.MojangProfile mojangProfile = ProfileUtil.lookupProfile(name);
+            if (mojangProfile != null){
+                return mojangProfile.getId();
+            }else{
+                return null;
+            }
         } else {
             return UUID.fromString(atomic.getString());
         }

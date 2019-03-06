@@ -12,6 +12,8 @@ import com.minebunch.core.utils.message.Strings;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.UUID;
+
 public class RankCommand extends BaseCommand {
 	private final CorePlugin plugin;
 
@@ -48,14 +50,13 @@ public class RankCommand extends BaseCommand {
 
 		if (target == null) {
 			plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
-				ProfileUtil.MojangProfile profile = ProfileUtil.lookupProfile(args[0]);
-
-				if (profile != null && plugin.getMongoStorage().getDocument("players", profile.getId()) != null) {
-					MongoRequest.newRequest("players", profile.getId())
+				UUID uuid = CorePlugin.getInstance().getUuidCache().getUuid(args[0]);
+				if (uuid != null && plugin.getMongoStorage().getDocument("players", uuid) != null) {
+					MongoRequest.newRequest("players", uuid)
 							.put("rank_name", rank.name())
 							.run();
 
-					sender.sendMessage(Colors.GREEN + "Set " + profile.getName() + "'s rank to "
+					sender.sendMessage(Colors.GREEN + "Set " + args[0] + "'s rank to "
 							+ rank.getColor() + rank.getName() + Colors.GREEN + ".");
 				} else {
 					sender.sendMessage(Strings.PLAYER_NOT_FOUND);
