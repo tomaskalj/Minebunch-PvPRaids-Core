@@ -12,8 +12,12 @@ import com.minebunch.core.utils.message.Colors;
 import com.minebunch.core.utils.message.Strings;
 import com.minebunch.core.utils.time.TimeUtil;
 import com.minebunch.core.utils.time.timer.Timer;
+
+import java.net.InetAddress;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.UUID;
+
 import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -50,16 +54,23 @@ public class PlayerListener implements Listener {
 
 	@EventHandler(priority = EventPriority.LOW)
 	public void onPreLogin(AsyncPlayerPreLoginEvent event) {
+		UUID uuid = event.getUniqueId();
+		InetAddress address = event.getAddress();
+		String host = address.getHostAddress();
+
+		CorePlugin.getInstance().getUuidCache().write(event.getName(), uuid);
+
 		if (event.getLoginResult() == AsyncPlayerPreLoginEvent.Result.ALLOWED &&
-				(plugin.getPlayerManager().isNameOnline(event.getName()) || plugin.getPlayerManager().getOnlineByIp(event.getAddress()) > 3)) {
+				(plugin.getPlayerManager().isNameOnline(event.getName())
+						|| plugin.getPlayerManager().getOnlineByIp(address) > 3)) {
 			event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Colors.RED + "You're already online!");
 			return;
 		}
 
 		if (event.getLoginResult() == AsyncPlayerPreLoginEvent.Result.ALLOWED) {
-			plugin.getProfileManager().createProfile(event.getName(), event.getUniqueId(), event.getAddress().getHostAddress());
+			plugin.getProfileManager().createProfile(event.getName(), uuid, address.getHostAddress());
 		} else if (event.getLoginResult() == AsyncPlayerPreLoginEvent.Result.KICK_FULL) {
-			CoreProfile profile = plugin.getProfileManager().createProfile(event.getName(), event.getUniqueId(), event.getAddress().getHostAddress());
+			CoreProfile profile = plugin.getProfileManager().createProfile(event.getName(), uuid, host);
 
 			if (profile.hasDonor()) {
 				event.allow();
@@ -67,12 +78,12 @@ public class PlayerListener implements Listener {
 				plugin.getProfileManager().removeProfile(event.getUniqueId());
 			}
 		} else if (event.getLoginResult() == AsyncPlayerPreLoginEvent.Result.KICK_WHITELIST) {
-			CoreProfile profile = plugin.getProfileManager().createProfile(event.getName(), event.getUniqueId(), event.getAddress().getHostAddress());
+			CoreProfile profile = plugin.getProfileManager().createProfile(event.getName(), uuid, host);
 
 			if (profile.hasStaff()) {
 				event.allow();
 			} else {
-				plugin.getProfileManager().removeProfile(event.getUniqueId());
+				plugin.getProfileManager().removeProfile(uuid);
 			}
 		}
 	}

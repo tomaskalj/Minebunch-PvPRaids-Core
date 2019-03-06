@@ -36,6 +36,10 @@ public class JedisManager {
         }
     }
 
+    public boolean isActive(){
+        return this.pool != null && !this.pool.isClosed();
+    }
+
     public void write(JsonPayloadType payload, JsonObject data) {
         JsonObject object = new JsonObject();
 

@@ -2,6 +2,7 @@ package com.minebunch.core.jedis.cache;
 
 import com.minebunch.core.CorePlugin;
 import com.minebunch.core.utils.data.AtomicString;
+import org.bukkit.Bukkit;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,13 +12,29 @@ public class UUIDCache implements JedisCache<String, UUID>{
     private Map<String, UUID> nameToUuid = new HashMap<>();
     private Map<UUID, String> uuidToName = new HashMap<>();
 
+    public UUIDCache(){
+        startRunnable();
+    }
+
     public String getName(UUID uuid) {
         if (uuidToName.containsKey(uuid)) {
             return uuidToName.get(uuid);
         }
 
-        // Fetch from database
+        // TODO: Fetch from Redis, if not present fetch from Mojang API
         return "Unknown";
+    }
+
+    private void startRunnable(){
+        // Runnable every minute to fetch from Redis
+        Bukkit.getScheduler().runTaskTimerAsynchronously(CorePlugin.getInstance(), ()->{
+            // Check for exceptions during the fetching process
+            try {
+                this.fetch();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }, 0L, 20L * 60L * 2L);
     }
 
     public UUID getUuid(String name) {
@@ -61,6 +78,8 @@ public class UUIDCache implements JedisCache<String, UUID>{
     }
 
     public void write(String name, UUID uuid) {
+        if (!CorePlugin.getInstance().getJedisManager().isActive())return;
+
         nameToUuid.put(name.toLowerCase(), uuid);
         uuidToName.put(uuid, name);
 

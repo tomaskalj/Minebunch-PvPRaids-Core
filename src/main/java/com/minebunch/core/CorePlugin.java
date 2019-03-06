@@ -29,6 +29,7 @@ import com.minebunch.core.commands.impl.toggle.ToggleGlobalChat;
 import com.minebunch.core.commands.impl.toggle.ToggleMessagesCommand;
 import com.minebunch.core.commands.impl.toggle.ToggleSoundsCommand;
 import com.minebunch.core.jedis.JedisManager;
+import com.minebunch.core.jedis.cache.UUIDCache;
 import com.minebunch.core.listeners.MessageListener;
 import com.minebunch.core.listeners.PlayerListener;
 import com.minebunch.core.managers.PlayerManager;
@@ -59,6 +60,9 @@ public class CorePlugin extends JavaPlugin {
 	@Getter
 	private static boolean isServerEnabled = false;
 
+	private Config config;
+	private String serverName;
+
 	private Filter filter;
 	private MongoStorage mongoStorage;
 	private ProfileManager profileManager;
@@ -67,8 +71,7 @@ public class CorePlugin extends JavaPlugin {
 	private ServerManager serverManager;
 	private JedisManager jedisManager;
 
-	private Config config;
-	private String serverName;
+	private UUIDCache uuidCache;
 
 	private static void registerSerializableClass(Class<?> clazz) {
 		if (ConfigurationSerializable.class.isAssignableFrom(clazz)) {
@@ -93,6 +96,8 @@ public class CorePlugin extends JavaPlugin {
 		playerManager = new PlayerManager();
 		serverManager = new ServerManager();
 		jedisManager = new JedisManager();
+
+		uuidCache = new UUIDCache();
 
 		registerCommands(
 				new BroadcastCommand(this), new ClearChatCommand(this), new IgnoreCommand(this),
