@@ -20,7 +20,7 @@ public class JedisManager {
     private JedisSubscriber subscriber;
 
     public JedisManager(){
-        Config config = CorePlugin.getInstance().getConfig();
+        Config config = CorePlugin.getInstance().getServerConfig();
 
         String host = config.getString("redis.host");
         int port = config.getInt("redis.port");
@@ -49,8 +49,6 @@ public class JedisManager {
         publisher.writeToChannel("core", object);
     }
 
-
-    // This will come in handy when implementing an UUID cache
     @SuppressWarnings("deprecation")
     public void runCommand(JedisCommand redisCommand) {
         Jedis jedis = pool.getResource();

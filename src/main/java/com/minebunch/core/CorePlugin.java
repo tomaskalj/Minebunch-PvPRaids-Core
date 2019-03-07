@@ -8,23 +8,7 @@ import com.minebunch.core.commands.impl.PingCommand;
 import com.minebunch.core.commands.impl.ReplyCommand;
 import com.minebunch.core.commands.impl.ReportCommand;
 import com.minebunch.core.commands.impl.TagCommand;
-import com.minebunch.core.commands.impl.staff.BackCommand;
-import com.minebunch.core.commands.impl.staff.BroadcastCommand;
-import com.minebunch.core.commands.impl.staff.ClearChatCommand;
-import com.minebunch.core.commands.impl.staff.FeedCommand;
-import com.minebunch.core.commands.impl.staff.GameModeCommand;
-import com.minebunch.core.commands.impl.staff.HealCommand;
-import com.minebunch.core.commands.impl.staff.InvSeeCommand;
-import com.minebunch.core.commands.impl.staff.MuteChatCommand;
-import com.minebunch.core.commands.impl.staff.RankCommand;
-import com.minebunch.core.commands.impl.staff.SetPlayerLimitCommand;
-import com.minebunch.core.commands.impl.staff.ShutdownCommand;
-import com.minebunch.core.commands.impl.staff.SlowChatCommand;
-import com.minebunch.core.commands.impl.staff.SpeedCommand;
-import com.minebunch.core.commands.impl.staff.StaffChatCommand;
-import com.minebunch.core.commands.impl.staff.TeleportCommand;
-import com.minebunch.core.commands.impl.staff.TpPosCommand;
-import com.minebunch.core.commands.impl.staff.VanishCommand;
+import com.minebunch.core.commands.impl.staff.*;
 import com.minebunch.core.commands.impl.toggle.ToggleGlobalChat;
 import com.minebunch.core.commands.impl.toggle.ToggleMessagesCommand;
 import com.minebunch.core.commands.impl.toggle.ToggleSoundsCommand;
@@ -60,7 +44,7 @@ public class CorePlugin extends JavaPlugin {
 	@Getter
 	private static boolean isServerEnabled = false;
 
-	private Config config;
+	private Config serverConfig;
 	private String serverName;
 
 	private Filter filter;
@@ -86,8 +70,8 @@ public class CorePlugin extends JavaPlugin {
 
 		registerSerializableClass(Cuboid.class);
 
-		config = new Config(this, "config.yml");
-		serverName = config.getString("server.name");
+		serverConfig = new Config(this, "config.yml");
+		serverName = serverConfig.getString("server.name");
 
 		filter = new Filter();
 		mongoStorage = new MongoStorage();
@@ -108,7 +92,7 @@ public class CorePlugin extends JavaPlugin {
 				new PingCommand(), new MuteChatCommand(this), new SlowChatCommand(this),
 				new GameModeCommand(this), new ShutdownCommand(this), new TagCommand(this),
 				new TpPosCommand(), new HealCommand(), new FeedCommand(), new SpeedCommand(), new InvSeeCommand(),
-				new SetPlayerLimitCommand(), new BackCommand(this)
+				new SetPlayerLimitCommand(), new SetSpawnCommand(), new BackCommand(this)
 		);
 		registerListeners(
 				new PlayerListener(this), new MessageListener(this)
