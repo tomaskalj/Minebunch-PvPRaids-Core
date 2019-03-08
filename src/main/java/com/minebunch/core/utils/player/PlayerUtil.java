@@ -21,10 +21,10 @@ public class PlayerUtil {
         }
 
         EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
-        Inventory craftingInventory = entityPlayer.activeContainer.getBukkitView().getTopInventory();
+        Inventory topInventory = entityPlayer.activeContainer.getBukkitView().getTopInventory();
 
-        if (craftingInventory instanceof CraftingInventory) {
-            craftingInventory.clear();
+        if (topInventory instanceof CraftingInventory) {
+            topInventory.clear();
         }
 
         player.setHealth(player.getMaxHealth());

@@ -106,7 +106,7 @@ public class UUIDCache implements JedisCache<String, UUID> {
         nameToUuid.put(name.toLowerCase(), uuid);
         uuidToName.put(uuid, name);
 
-        CorePlugin.getInstance().getJedisManager().runCommand((redis) -> {
+        CorePlugin.getInstance().getJedisManager().runCommand(redis -> {
             redis.hset("name-to-uuid", name.toLowerCase(), uuid.toString());
             redis.hset("uuid-to-name", uuid.toString(), name);
         });

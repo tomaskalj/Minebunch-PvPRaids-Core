@@ -70,7 +70,7 @@ public class ItemBuilder {
         return this;
     }
 
-    public ItemBuilder setUnbreakable(boolean unbreakable) {
+    public ItemBuilder unbreakable(boolean unbreakable) {
         ItemMeta meta = item.getItemMeta();
         meta.spigot().setUnbreakable(unbreakable);
         item.setItemMeta(meta);

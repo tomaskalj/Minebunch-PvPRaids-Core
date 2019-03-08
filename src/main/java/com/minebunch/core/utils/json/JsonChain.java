@@ -1,10 +1,9 @@
 package com.minebunch.core.utils.json;
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 
 public class JsonChain {
-    private final JsonObject json = new JsonObject();
+    private final com.google.gson.JsonObject json = new com.google.gson.JsonObject();
 
     public JsonChain addProperty(String property, String value) {
         this.json.addProperty(property, value);
@@ -31,7 +30,7 @@ public class JsonChain {
         return this;
     }
 
-    public JsonObject get() {
+    public com.google.gson.JsonObject get() {
         return this.json;
     }
 }

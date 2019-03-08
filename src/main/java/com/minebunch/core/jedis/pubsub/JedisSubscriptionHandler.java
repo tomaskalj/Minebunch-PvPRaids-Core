@@ -1,69 +1,36 @@
 package com.minebunch.core.jedis.pubsub;
 
 import com.google.gson.JsonObject;
-import com.minebunch.core.CorePlugin;
-import com.minebunch.core.jedis.json.JsonMessages;
-import com.minebunch.core.jedis.json.JsonPayloadType;
-import com.minebunch.core.player.rank.Rank;
+import com.minebunch.core.jedis.JedisManager;
+import com.minebunch.core.jedis.json.payloads.PayloadType;
+import com.minebunch.core.jedis.json.payloads.handler.JsonPayloadHandler;
+import lombok.RequiredArgsConstructor;
+import org.bukkit.Bukkit;
 
+@RequiredArgsConstructor
 public class JedisSubscriptionHandler {
+    private final JedisManager manager;
 
     public void processJson(JsonObject json) {
-        JsonPayloadType type;
+        String payload = json.get("payload").getAsString();
+        PayloadType type;
 
         try {
-            type = JsonPayloadType.valueOf(json.get("type").getAsString());
-        } catch (IllegalArgumentException e) {
-            CorePlugin.getInstance().getLogger().warning("Could not parse an incoming Json object!");
+            type = PayloadType.valueOf(payload);
+        } catch (IllegalArgumentException ex) {
+            Bukkit.getLogger().warning("Tried to process JSON with invalid payload type: " + payload);
+            return;
+        }
+
+        JsonPayloadHandler handler = manager.getHandlerByType(type);
+
+        if (handler == null) {
+            Bukkit.getLogger().warning("Tried to process JSON payload with no registered handler: " + payload);
             return;
         }
 
         JsonObject data = json.get("data").getAsJsonObject();
 
-        switch (type) {
-            case STAFF_CHAT: {
-                String serverName = data.get("server_name").getAsString();
-                String playerRank = data.get("player_rank").getAsString();
-                String playerName = data.get("player_name").getAsString();
-                String playerMessage = data.get("message").getAsString();
-
-                Rank rank = Rank.getByName(playerRank);
-                if (rank == null) {
-                    CorePlugin.getInstance().getLogger().warning("Invalid rank name passed in Json message!");
-                    return;
-                }
-
-                String message = JsonMessages.STAFF_CHAT
-                        .replace("{server_name}", serverName)
-                        .replace("{player_rank_colour}", rank.getColor())
-                        .replace("{player_name}", playerName)
-                        .replace("{message}", playerMessage);
-
-                CorePlugin.getInstance().getStaffManager().messageStaff(message);
-            }
-
-            case STAFF_JOIN: {
-                String serverName = data.get("server_name").getAsString();
-                String playerRank = data.get("player_rank").getAsString();
-                String playerName = data.get("player_name").getAsString();
-
-                Rank rank = Rank.getByName(playerRank);
-                if (rank == null) {
-                    CorePlugin.getInstance().getLogger().warning("Invalid rank name passed in Json message!");
-                    return;
-                }
-
-                String message = JsonMessages.STAFF_JOIN
-                        .replace("{server_name}", serverName)
-                        .replace("{player_rank_colour}", rank.getColor())
-                        .replace("{player_name}", playerName);
-
-                CorePlugin.getInstance().getStaffManager().messageStaff(message);
-            }
-
-            case RANK_CHANGE: {
-
-            }
-        }
+        handler.handlePayload(data);
     }
 }

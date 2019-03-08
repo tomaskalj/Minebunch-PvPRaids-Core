@@ -9,7 +9,6 @@ import redis.clients.jedis.JedisPubSub;
 
 public class JedisSubscriber {
     private static final JsonParser JSON_PARSER = new JsonParser();
-
     private final String channel;
     private final Jedis jedis;
     private JedisPubSub pubSub;
@@ -24,14 +23,15 @@ public class JedisSubscriber {
             public void onMessage(String channel, String message) {
                 try {
                     JsonObject object = JSON_PARSER.parse(message).getAsJsonObject();
-                    JedisSubscriber.this.subscriptionHandler.processJson(object);
+                    subscriptionHandler.processJson(object);
                 } catch (JsonParseException e) {
-                    System.out.println("Could not parse Json message!");
+                    throw new RuntimeException("Could not parse incoming JSON object", e);
                 }
             }
         };
 
         jedis = new Jedis(settings.getAddress(), settings.getPort());
+
         if (settings.hasPassword()) {
             jedis.auth(settings.getPassword());
         }

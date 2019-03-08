@@ -16,7 +16,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 // TODO integrate into UUID cache
-@Deprecated
 @UtilityClass
 public final class ProfileUtil {
     private final String API_URL = "https://api.mojang.com/users/profiles/minecraft/";

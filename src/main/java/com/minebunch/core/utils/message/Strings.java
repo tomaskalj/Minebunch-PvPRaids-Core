@@ -8,6 +8,8 @@ public class Strings {
     // random strings
     public final String SPLITTER = "┃";
     public final String SEPARATOR = Colors.GRAY + Colors.S + StringUtils.repeat("-", 20);
+
+    // when sent to a player who is using the cracked Vape client, it will notify the server that they are cheating
     public final String CRACKED_VAPE_MESSAGE = "§8 §8 §1 §3 §3 §7 §8 §r";
 
     // messages

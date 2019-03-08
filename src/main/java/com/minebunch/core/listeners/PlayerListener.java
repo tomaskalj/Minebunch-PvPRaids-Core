@@ -1,9 +1,11 @@
 package com.minebunch.core.listeners;
 
+import com.google.gson.JsonObject;
 import com.minebunch.core.CorePlugin;
 import com.minebunch.core.event.player.PlayerRankChangeEvent;
 import com.minebunch.core.event.player.PlayerTagChangeEvent;
-import com.minebunch.core.jedis.json.JsonPayloadType;
+import com.minebunch.core.jedis.json.payloads.JsonPayload;
+import com.minebunch.core.jedis.json.payloads.PayloadType;
 import com.minebunch.core.player.CoreProfile;
 import com.minebunch.core.player.rank.Rank;
 import com.minebunch.core.utils.StringUtil;
@@ -168,12 +170,13 @@ public class PlayerListener implements Listener {
         plugin.getStaffManager().hideVanishedStaffFromPlayer(player);
 
         if (profile.hasStaff()) {
-            CorePlugin.getInstance().getJedisManager().write(JsonPayloadType.STAFF_JOIN,
-                    new JsonChain()
-                            .addProperty("player_rank", profile.getRank().getName())
-                            .addProperty("player_name", player.getName())
-                            .addProperty("server_name", CorePlugin.getInstance().getServerName())
-                            .get());
+            JsonObject data = new JsonChain()
+                    .addProperty("player_rank", profile.getRank().getName())
+                    .addProperty("player_name", player.getName())
+                    .addProperty("server_name", CorePlugin.getInstance().getServerName())
+                    .get();
+
+            plugin.getJedisManager().write(new JsonPayload(PayloadType.STAFF_JOIN, data));
         }
     }
 
@@ -244,13 +247,15 @@ public class PlayerListener implements Listener {
             }
         } else if (profile.isInStaffChat()) {
             event.setCancelled(true);
-            CorePlugin.getInstance().getJedisManager().write(JsonPayloadType.STAFF_CHAT,
-                    new JsonChain()
-                            .addProperty("server_name", CorePlugin.getInstance().getServerName())
-                            .addProperty("player_rank", profile.getRank().getName())
-                            .addProperty("player_name", player.getName())
-                            .addProperty("message", msg)
-                            .get());
+
+            JsonObject data = new JsonChain()
+                    .addProperty("server_name", CorePlugin.getInstance().getServerName())
+                    .addProperty("player_rank", profile.getRank().getName())
+                    .addProperty("player_name", player.getName())
+                    .addProperty("message", msg)
+                    .get();
+
+            plugin.getJedisManager().write(new JsonPayload(PayloadType.STAFF_CHAT, data));
             return;
         }
 

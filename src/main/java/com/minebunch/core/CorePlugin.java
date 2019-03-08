@@ -85,7 +85,7 @@ public class CorePlugin extends JavaPlugin {
 
         registerSerializableClass(Cuboid.class);
 
-        serverConfig = new Config(this, "config.yml");
+        serverConfig = new Config(this, "config");
         serverName = serverConfig.getString("server.name");
 
         filter = new Filter();
@@ -147,6 +147,7 @@ public class CorePlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        jedisManager.close();
         profileManager.saveProfiles();
 
         // properly disconnect players since Spigot doesn't

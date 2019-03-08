@@ -1,8 +1,12 @@
 package com.minebunch.core.utils.storage;
 
+import com.google.common.io.ByteStreams;
 import com.minebunch.core.utils.structure.Cuboid;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -17,8 +21,29 @@ public class Config {
     private YamlConfiguration delegate;
 
     public Config(JavaPlugin plugin, String name) {
-        file = new File(plugin.getDataFolder() + "/" + name + ".yml");
+        this.file = new File(plugin.getDataFolder(), name + ".yml");
+
+        if (!plugin.getDataFolder().exists()) {
+            plugin.getDataFolder().mkdir();
+        }
+
+        File configFile = file;
+
+        if (!configFile.exists()) {
+            try {
+                configFile.createNewFile();
+
+                try (InputStream is = plugin.getClass().getClassLoader().getResourceAsStream(name + ".yml");
+                     OutputStream os = new FileOutputStream(configFile)) {
+                    ByteStreams.copy(is, os);
+                }
+            } catch (IOException ex) {
+                throw new RuntimeException("An error occurred while creating config file", ex);
+            }
+        }
+
         reload();
+        save();
     }
 
     public void reload() {
