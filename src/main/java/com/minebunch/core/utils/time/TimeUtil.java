@@ -1,5 +1,6 @@
 package com.minebunch.core.utils.time;
 
+import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
@@ -8,6 +9,11 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class TimeUtil {
+
+    private static final String HOUR_FORMAT = "%02d:%02d:%02d";
+    private static final String MINUTE_FORMAT = "%02d:%02d";
+    private static final DecimalFormat SECONDS_FORMAT = new DecimalFormat("#0.0");
+
     public String formatTimeMillis(long millis) {
         long seconds = millis / 1000L;
 

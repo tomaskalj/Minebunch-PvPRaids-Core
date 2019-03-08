@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -237,6 +238,17 @@ public class PlayerListener implements Listener {
         Player player = event.getPlayer();
         CoreProfile profile = plugin.getProfileManager().getProfile(player);
         String msg = event.getMessage();
+
+        Punishment mute = CorePlugin.getInstance().getPunishmentManager().getActiveMute(player.getUniqueId());
+        if (mute != null) {
+            if (mute.isPermanent()) {
+                player.sendMessage(ChatColor.RED + "You are permanently muted.");
+            } else {
+                player.sendMessage(ChatColor.RED + "You are currently muted for another " + mute.getTimeLeft() + ".");
+            }
+            event.setCancelled(true);
+            return;
+        }
 
         if (!profile.hasStaff()) {
             if (plugin.getServerManager().isGlobalChatMuted()) {

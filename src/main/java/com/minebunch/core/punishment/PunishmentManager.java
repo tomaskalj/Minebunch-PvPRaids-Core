@@ -38,15 +38,26 @@ public class PunishmentManager {
     }
 
     public Punishment getActiveBan(UUID playerUuid){
-        for (Punishment punishment : getPunishments(playerUuid)){
-            if (punishment.isBan() && punishment.isActive())return punishment;
-        }
-        return null;
+        return searchPunishment(playerUuid, true);
     }
 
     public Punishment getActiveMute(UUID playerUuid){
-        for (Punishment punishment : getPunishments(playerUuid)){
-            if (!punishment.isBan() && punishment.isActive())return punishment;
+        return searchPunishment(playerUuid, false);
+    }
+
+    private Punishment searchPunishment(UUID playerUuid, boolean ban){
+        Set<Punishment> punishments;
+        if (punishmentMap.containsKey(playerUuid)) {
+            punishments = getPunishments(playerUuid);
+        }else{
+            punishments = getFromDatabase(playerUuid);
+        }
+        for (Punishment punishment : punishments) {
+            if (ban){
+                if (punishment.isBan() && punishment.isActive()) return punishment;
+            }else{
+                if (!punishment.isBan() && punishment.isActive()) return punishment;
+            }
         }
         return null;
     }
