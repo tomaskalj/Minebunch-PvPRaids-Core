@@ -8,7 +8,7 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class TimeUtil {
-    public static String formatTimeMillis(long millis) {
+    public String formatTimeMillis(long millis) {
         long seconds = millis / 1000L;
 
         if (seconds <= 0) {
@@ -49,25 +49,25 @@ public class TimeUtil {
         return time.toString().trim();
     }
 
-    private static String parseTimeSpec(long time, String spec) {
+    private String parseTimeSpec(long time, String spec) {
         return time + " " + (time == 1 ? spec : spec + "s") + " ";
     }
 
-    public static String formatTimeSeconds(long seconds) {
+    public String formatTimeSeconds(long seconds) {
         return formatTimeMillis(seconds * 1000);
     }
 
-    public static String formatTimeMillisToClock(long millis) {
+    public String formatTimeMillisToClock(long millis) {
         return millis / 1000L <= 0 ? "0:00" : String.format("%01d:%02d",
                 TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)),
                 TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
     }
 
-    public static String formatTimeSecondsToClock(long seconds) {
+    public String formatTimeSecondsToClock(long seconds) {
         return formatTimeMillisToClock(seconds * 1000);
     }
 
-    public static int parseTime(String time) {
+    public int parseTime(String time) {
         if (time.equals("0") || time.equals("")) {
             return 0;
         }

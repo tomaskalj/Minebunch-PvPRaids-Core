@@ -15,20 +15,21 @@ import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+@Deprecated
 @UtilityClass
 public final class ProfileUtil {
-    private static final String API_URL = "https://api.mojang.com/users/profiles/minecraft/";
-    private static final String SESSION_SERVER_URL = "https://sessionserver.mojang.com/session/minecraft/profile/";
-    private static final Cache<String, MojangProfile> NAME_CACHE = CacheBuilder
+    private final String API_URL = "https://api.mojang.com/users/profiles/minecraft/";
+    private final String SESSION_SERVER_URL = "https://sessionserver.mojang.com/session/minecraft/profile/";
+    private final Cache<String, MojangProfile> NAME_CACHE = CacheBuilder
             .newBuilder()
             .expireAfterAccess(15L, TimeUnit.MINUTES)
             .build();
-    private static final Cache<UUID, MojangProfile> ID_CACHE = CacheBuilder
+    private final Cache<UUID, MojangProfile> ID_CACHE = CacheBuilder
             .newBuilder()
             .expireAfterAccess(15L, TimeUnit.MINUTES)
             .build();
 
-    public static MojangProfile lookupProfile(UUID id) {
+    public MojangProfile lookupProfile(UUID id) {
         MojangProfile cachedProfile = ID_CACHE.getIfPresent(id);
 
         if (cachedProfile != null) {
@@ -50,7 +51,7 @@ public final class ProfileUtil {
         return null;
     }
 
-    public static MojangProfile lookupProfile(String name) {
+    public MojangProfile lookupProfile(String name) {
         MojangProfile cachedProfile = ID_CACHE.getIfPresent(name.toLowerCase());
 
         if (cachedProfile != null) {
@@ -76,7 +77,7 @@ public final class ProfileUtil {
         return null;
     }
 
-    private static MojangProfile cacheProfile(String name, UUID id) {
+    private MojangProfile cacheProfile(String name, UUID id) {
         MojangProfile profile = new MojangProfile(name, id);
 
         NAME_CACHE.put(name.toLowerCase(), profile);
@@ -85,12 +86,12 @@ public final class ProfileUtil {
         return profile;
     }
 
-    private static UUID parseId(String idString) {
+    private UUID parseId(String idString) {
         return UUID.fromString(idString.substring(0, 8) + "-" + idString.substring(8, 12) + "-"
                 + idString.substring(12, 16) + "-" + idString.substring(16, 20) + "-" + idString.substring(20, 32));
     }
 
-    private static UUID lookupIdFromName(String name) {
+    private UUID lookupIdFromName(String name) {
         try {
             URL url = new URL(API_URL + name);
 
@@ -108,7 +109,7 @@ public final class ProfileUtil {
         return null;
     }
 
-    private static String lookupNameFromId(UUID id) {
+    private String lookupNameFromId(UUID id) {
         try {
             URL url = new URL(SESSION_SERVER_URL + id.toString().replace("-", ""));
 

@@ -3,10 +3,10 @@ package com.minebunch.core.jedis.cache;
 import com.minebunch.core.CorePlugin;
 import com.minebunch.core.utils.ProfileUtil;
 import com.minebunch.core.utils.TaskUtil;
-import com.minebunch.core.utils.data.AtomicString;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class UUIDCache implements JedisCache<String, UUID> {
     private Map<String, UUID> nameToUuid = new HashMap<>();
@@ -22,13 +22,14 @@ public class UUIDCache implements JedisCache<String, UUID> {
         }
 
         // Use an atomic string here because a different thread is being used to get the name
-        AtomicString atomic = new AtomicString();
+        AtomicReference<String> atomicString = new AtomicReference<>();
+
         CorePlugin.getInstance().getJedisManager().runCommand((redis) -> {
-            atomic.setString(redis.hget("uuid-to-name", uuid.toString()));
+            atomicString.set(redis.hget("uuid-to-name", uuid.toString()));
         });
 
         // If Redis does not have uuid cached, try to look through the Mojang API. Else return the result from Redis
-        if (atomic.getString() == null) {
+        if (atomicString.get() == null) {
             ProfileUtil.MojangProfile mojangProfile = ProfileUtil.lookupProfile(uuid);
             if (mojangProfile != null) {
                 return mojangProfile.getName();
@@ -36,7 +37,7 @@ public class UUIDCache implements JedisCache<String, UUID> {
                 return "Unknown";
             }
         } else {
-            return atomic.getString();
+            return atomicString.get();
         }
     }
 
@@ -59,14 +60,14 @@ public class UUIDCache implements JedisCache<String, UUID> {
         }
 
         // Use an atomic string here because a different thread is being used to get the name
-        AtomicString atomic = new AtomicString();
+        AtomicReference<String> atomicString = new AtomicReference<>();
 
         CorePlugin.getInstance().getJedisManager().runCommand(redis -> {
-            atomic.setString(redis.hget("name-to-uuid", name.toLowerCase()));
+            atomicString.set(redis.hget("name-to-uuid", name.toLowerCase()));
         });
 
         // If Redis does not have name cached, try to look through the Mojang API. Else return the result from Redis
-        if (atomic.getString() == null) {
+        if (atomicString.get() == null) {
             ProfileUtil.MojangProfile mojangProfile = ProfileUtil.lookupProfile(name);
             if (mojangProfile != null) {
                 return mojangProfile.getId();
@@ -74,7 +75,7 @@ public class UUIDCache implements JedisCache<String, UUID> {
                 return null;
             }
         } else {
-            return UUID.fromString(atomic.getString());
+            return UUID.fromString(atomicString.get());
         }
     }
 

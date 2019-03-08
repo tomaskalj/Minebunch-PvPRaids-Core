@@ -9,14 +9,14 @@ import org.bukkit.Server;
 // TODO cleanup
 @UtilityClass
 public class ServerUtil {
-    private static final String CRAFT_BUKKIT_PACKAGE;
-    private static final String NET_MINECRAFT_SERVER_PACKAGE;
+    private final String CRAFT_BUKKIT_PACKAGE;
+    private final String NET_MINECRAFT_SERVER_PACKAGE;
 
-    private static final Class CRAFT_SERVER_CLASS;
-    private static final Method CRAFT_SERVER_GET_HANDLE_METHOD;
+    private final Class CRAFT_SERVER_CLASS;
+    private final Method CRAFT_SERVER_GET_HANDLE_METHOD;
 
-    private static final Class PLAYER_LIST_CLASS;
-    private static final Field PLAYER_LIST_MAX_PLAYERS_FIELD;
+    private final Class PLAYER_LIST_CLASS;
+    private final Field PLAYER_LIST_MAX_PLAYERS_FIELD;
 
     static {
         try {
@@ -39,7 +39,7 @@ public class ServerUtil {
         }
     }
 
-    public static void setMaxPlayers(Server server, int slots) {
+    public void setMaxPlayers(Server server, int slots) {
         try {
             PLAYER_LIST_MAX_PLAYERS_FIELD.set(CRAFT_SERVER_GET_HANDLE_METHOD.invoke(server), slots);
         } catch (Exception e) {

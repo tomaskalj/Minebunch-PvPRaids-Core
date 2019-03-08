@@ -4,8 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class JsonChain {
-
-    private JsonObject json = new JsonObject();
+    private final JsonObject json = new JsonObject();
 
     public JsonChain addProperty(String property, String value) {
         this.json.addProperty(property, value);
@@ -35,5 +34,4 @@ public class JsonChain {
     public JsonObject get() {
         return this.json;
     }
-
 }

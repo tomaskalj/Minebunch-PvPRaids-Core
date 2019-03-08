@@ -1,10 +1,13 @@
 package com.minebunch.core.utils.player;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.experimental.UtilityClass;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.Inventory;
@@ -12,7 +15,7 @@ import org.bukkit.potion.PotionEffect;
 
 @UtilityClass
 public class PlayerUtil {
-    public static void clearPlayer(Player player) {
+    public void clearPlayer(Player player) {
         for (PotionEffect effect : player.getActivePotionEffects()) {
             player.removePotionEffect(effect.getType());
         }
@@ -39,7 +42,14 @@ public class PlayerUtil {
         player.updateInventory();
     }
 
-    public static int getPing(Player player) {
+    public int getPing(Player player) {
         return ((CraftPlayer) player).getHandle().ping;
+    }
+
+    public List<Player> getNearbyPlayers(Entity entity, double radius) {
+        return entity.getNearbyEntities(radius, radius, radius).stream()
+                .filter(Player.class::isInstance)
+                .map(Player.class::cast)
+                .collect(Collectors.toList());
     }
 }
