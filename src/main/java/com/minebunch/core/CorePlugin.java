@@ -8,6 +8,7 @@ import com.minebunch.core.commands.impl.PingCommand;
 import com.minebunch.core.commands.impl.ReplyCommand;
 import com.minebunch.core.commands.impl.ReportCommand;
 import com.minebunch.core.commands.impl.TagCommand;
+import com.minebunch.core.commands.impl.punishment.*;
 import com.minebunch.core.commands.impl.staff.BackCommand;
 import com.minebunch.core.commands.impl.staff.BroadcastCommand;
 import com.minebunch.core.commands.impl.staff.ClearChatCommand;
@@ -107,7 +108,8 @@ public class CorePlugin extends JavaPlugin {
                 new PingCommand(), new MuteChatCommand(this), new SlowChatCommand(this),
                 new GameModeCommand(this), new ShutdownCommand(this), new TagCommand(this),
                 new TpPosCommand(), new HealCommand(), new FeedCommand(), new SpeedCommand(), new InvSeeCommand(),
-                new SetPlayerLimitCommand(), new SetSpawnCommand(), new BackCommand(this)
+                new SetPlayerLimitCommand(), new SetSpawnCommand(), new BackCommand(this),
+                new BanCommand(), new TempBanCommand(), new MuteCommand(), new UnbanCommand(), new UnmuteCommand()
         );
         registerListeners(
                 new PlayerListener(this), new MessageListener(this)
