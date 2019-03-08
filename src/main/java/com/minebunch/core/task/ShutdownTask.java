@@ -9,16 +9,16 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 @AllArgsConstructor
 public class ShutdownTask extends BukkitRunnable {
-	private int shutdownSeconds;
+    private int shutdownSeconds;
 
-	@Override
-	public void run() {
-		if (shutdownSeconds == 0) {
-			Bukkit.shutdown();
-		} else if (shutdownSeconds % 60 == 0 || shutdownSeconds == 30 || shutdownSeconds == 10 || shutdownSeconds <= 5) {
-			CorePlugin.getInstance().getServerManager().broadcastAlert(Colors.RED + "The server is restarting in " + TimeUtil.formatTimeSeconds(shutdownSeconds) + ".");
-		}
+    @Override
+    public void run() {
+        if (shutdownSeconds == 0) {
+            Bukkit.shutdown();
+        } else if (shutdownSeconds % 60 == 0 || shutdownSeconds == 30 || shutdownSeconds == 10 || shutdownSeconds <= 5) {
+            CorePlugin.getInstance().getServerManager().broadcastAlert(Colors.RED + "The server is restarting in " + TimeUtil.formatTimeSeconds(shutdownSeconds) + ".");
+        }
 
-		shutdownSeconds--;
-	}
+        shutdownSeconds--;
+    }
 }

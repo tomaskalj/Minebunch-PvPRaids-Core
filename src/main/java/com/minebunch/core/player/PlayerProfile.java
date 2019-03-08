@@ -2,14 +2,13 @@ package com.minebunch.core.player;
 
 import com.minebunch.core.CorePlugin;
 import com.minebunch.core.storage.database.MongoRequest;
-import org.bson.Document;
-
 import java.util.UUID;
+import org.bson.Document;
 
 /**
  * Extend this class for profiles to store in the Mongo database
  * Use method 'save' to save the profile to the database and 'load' to load from the database
- *
+ * <p>
  * Method 'serialize' builds a MongoRequest from the profile to save
  * Method 'deserialize' reads a Document retrieved from the database and writes values to the profile instance
  */
@@ -21,10 +20,10 @@ public abstract class PlayerProfile {
     /**
      * Takes in the UUID of the player and the Mongo collection name to save to and load from
      *
-     * @param id - UUID of the player
+     * @param id             - UUID of the player
      * @param collectionName - Mongo collection name
      */
-    public PlayerProfile(UUID id, String collectionName){
+    public PlayerProfile(UUID id, String collectionName) {
         this.id = id;
         this.collectionName = collectionName;
     }
@@ -32,7 +31,7 @@ public abstract class PlayerProfile {
     /**
      * Calls the deserialize function in the subclass to deserialize the specified document
      */
-    public final void load(){
+    public final void load() {
         CorePlugin.getInstance().getMongoStorage().getOrCreateDocument(collectionName, id, (document, exists) -> {
             if (exists) deserialize(document);
             save(false);
@@ -44,7 +43,7 @@ public abstract class PlayerProfile {
      *
      * @param async - If the method should run the MongoRequest on the main thread or a different thread
      */
-    public final void save(boolean async){
+    public final void save(boolean async) {
         MongoRequest request = serialize();
         if (async) {
             CorePlugin.getInstance().getServer().getScheduler()

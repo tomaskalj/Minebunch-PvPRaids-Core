@@ -1,11 +1,11 @@
 package com.minebunch.core.utils.time.timer;
 
 public interface Timer {
-	boolean isActive(boolean autoReset);
+    boolean isActive(boolean autoReset);
 
-	boolean isActive();
+    boolean isActive();
 
-	String formattedExpiration();
+    String formattedExpiration();
 
-	void reset();
+    void reset();
 }

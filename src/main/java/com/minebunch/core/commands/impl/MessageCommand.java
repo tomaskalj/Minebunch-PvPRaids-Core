@@ -10,36 +10,36 @@ import com.minebunch.core.utils.message.Strings;
 import org.bukkit.entity.Player;
 
 public class MessageCommand extends PlayerCommand {
-	private final CorePlugin plugin;
+    private final CorePlugin plugin;
 
-	public MessageCommand(CorePlugin plugin) {
-		super("message");
-		this.plugin = plugin;
-		setAliases("msg", "m", "whisper", "w", "tell");
-		setUsage(Colors.RED + "Usage: /message <player> <message>");
-	}
+    public MessageCommand(CorePlugin plugin) {
+        super("message");
+        this.plugin = plugin;
+        setAliases("msg", "m", "whisper", "w", "tell");
+        setUsage(Colors.RED + "Usage: /message <player> <message>");
+    }
 
-	@Override
-	public void execute(Player player, String[] args) {
-		if (args.length < 2) {
-			player.sendMessage(usageMessage);
-			return;
-		}
+    @Override
+    public void execute(Player player, String[] args) {
+        if (args.length < 2) {
+            player.sendMessage(usageMessage);
+            return;
+        }
 
-		Player target = plugin.getServer().getPlayer(args[0]);
+        Player target = plugin.getServer().getPlayer(args[0]);
 
-		if (target == null) {
-			player.sendMessage(Strings.PLAYER_NOT_FOUND);
-			return;
-		}
+        if (target == null) {
+            player.sendMessage(Strings.PLAYER_NOT_FOUND);
+            return;
+        }
 
-		CoreProfile targetProfile = plugin.getProfileManager().getProfile(target.getUniqueId());
+        CoreProfile targetProfile = plugin.getProfileManager().getProfile(target.getUniqueId());
 
-		if (targetProfile.hasPlayerIgnored(player.getUniqueId())) {
-			player.sendMessage(Colors.RED + "That player is ignoring you!");
-			return;
-		}
+        if (targetProfile.hasPlayerIgnored(player.getUniqueId())) {
+            player.sendMessage(Colors.RED + "That player is ignoring you!");
+            return;
+        }
 
-		plugin.getServer().getPluginManager().callEvent(new PlayerMessageEvent(player, target, StringUtil.buildString(args, 1)));
-	}
+        plugin.getServer().getPluginManager().callEvent(new PlayerMessageEvent(player, target, StringUtil.buildString(args, 1)));
+    }
 }

@@ -1,33 +1,33 @@
 package com.minebunch.core.server;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.minebunch.core.event.server.RedisServerSaveEvent;
 import com.minebunch.core.player.rank.Rank;
-import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
+import java.util.HashMap;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.bukkit.Bukkit;
 
-import java.lang.management.ManagementFactory;
-import java.util.HashMap;
-import java.util.UUID;
-
-public @Getter @ToString class ServerModel implements Runnable {
+public @Getter
+@ToString
+class ServerModel implements Runnable {
     private final String id;
-
-    @Setter private String displayName;
-    @Setter private int onlinePlayers, slots, overflow;
-    @Setter private boolean online;
-    @Setter private long heartbeat;
-
     private final BasicDBObject playerData = new BasicDBObject();
     private final HashMap<String, String> extraFields = Maps.newHashMap();
-
-    @Setter private Rank lockRank = Rank.MEMBER;
-    @Setter private String lockMessage = "";
+    @Setter
+    private String displayName;
+    @Setter
+    private int onlinePlayers, slots, overflow;
+    @Setter
+    private boolean online;
+    @Setter
+    private long heartbeat;
+    @Setter
+    private Rank lockRank = Rank.MEMBER;
+    @Setter
+    private String lockMessage = "";
 
     private long uptime;
 
@@ -144,34 +144,33 @@ public @Getter @ToString class ServerModel implements Runnable {
      *
      * <p>List of checks performed:
      * <ul>
-     *     <li>Is server locked?</li>
-     *     <li>Is server full?</li>
-     *     <li>Is helper, mod or admin?</li>
-     *     <li>Is full and at least premium?</li>
-     *     <li>Has server reached overflow capacity?</li>
+     * <li>Is server locked?</li>
+     * <li>Is server full?</li>
+     * <li>Is helper, mod or admin?</li>
+     * <li>Is full and at least premium?</li>
+     * <li>Has server reached overflow capacity?</li>
      * </ul>
      *
      * @param rank rank to check
      * @return if the given rank can join the server
      */
     public boolean canJoin(Rank rank) {
-        if(getLockRank() != null && getLockRank().ordinal() > rank.ordinal()) {
+        if (getLockRank() != null && getLockRank().ordinal() > rank.ordinal()) {
             return false;
         }
 
         // If server is full and they aren't staff
-        if(isFull() && Rank.LOWEST_STAFF.ordinal() > rank.ordinal()) {
-            if(Rank.LOWEST_DONOR.ordinal() > rank.ordinal()) { // If they are not donator - deny
+        if (isFull() && Rank.LOWEST_STAFF.ordinal() > rank.ordinal()) {
+            if (Rank.LOWEST_DONOR.ordinal() > rank.ordinal()) { // If they are not donator - deny
                 return false;
             }
 
-            if(getOverflow() <= 0) { // If there is no overflow - deny
+            if (getOverflow() <= 0) { // If there is no overflow - deny
                 return false;
             }
 
-            if((getOnlinePlayers() + 1) > getOverflow()) { // If the overflow is full - deny
-                return false;
-            }
+            // If the overflow is full - deny
+            return (getOnlinePlayers() + 1) <= getOverflow();
         }
 
         // Default to allow if staff

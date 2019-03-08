@@ -9,35 +9,35 @@ import com.minebunch.core.utils.time.timer.Timer;
 import org.bukkit.entity.Player;
 
 public class HelpOpCommand extends PlayerCommand {
-	private final CorePlugin plugin;
+    private final CorePlugin plugin;
 
-	public HelpOpCommand(CorePlugin plugin) {
-		super("helpop");
-		this.plugin = plugin;
-		setAliases("request");
-		setUsage(Colors.RED + "/helpop <request>");
-	}
+    public HelpOpCommand(CorePlugin plugin) {
+        super("helpop");
+        this.plugin = plugin;
+        setAliases("request");
+        setUsage(Colors.RED + "/helpop <request>");
+    }
 
-	@Override
-	public void execute(Player player, String[] args) {
-		if (args.length < 1) {
-			player.sendMessage(usageMessage);
-			return;
-		}
+    @Override
+    public void execute(Player player, String[] args) {
+        if (args.length < 1) {
+            player.sendMessage(usageMessage);
+            return;
+        }
 
-		CoreProfile profile = plugin.getProfileManager().getProfile(player);
-		Timer cooldownTimer = profile.getReportCooldownTimer();
+        CoreProfile profile = plugin.getProfileManager().getProfile(player);
+        Timer cooldownTimer = profile.getReportCooldownTimer();
 
-		if (cooldownTimer.isActive()) {
-			player.sendMessage(Colors.RED + "You can't request assistance for another " + cooldownTimer.formattedExpiration() + ".");
-			return;
-		}
+        if (cooldownTimer.isActive()) {
+            player.sendMessage(Colors.RED + "You can't request assistance for another " + cooldownTimer.formattedExpiration() + ".");
+            return;
+        }
 
-		String request = StringUtil.buildString(args, 0);
+        String request = StringUtil.buildString(args, 0);
 
-		plugin.getStaffManager().messageStaff("\n" + Colors.RED + "[HelpOp] " + Colors.SECONDARY + player.getName()
-				+ Colors.PRIMARY + " requested assistance: " + Colors.SECONDARY + request + Colors.PRIMARY + "." + "\n ");
+        plugin.getStaffManager().messageStaff("\n" + Colors.RED + "[HelpOp] " + Colors.SECONDARY + player.getName()
+                + Colors.PRIMARY + " requested assistance: " + Colors.SECONDARY + request + Colors.PRIMARY + "." + "\n ");
 
-		player.sendMessage(Colors.GREEN + "Request sent to all online staff members: " + Colors.R + request);
-	}
+        player.sendMessage(Colors.GREEN + "Request sent to all online staff members: " + Colors.R + request);
+    }
 }

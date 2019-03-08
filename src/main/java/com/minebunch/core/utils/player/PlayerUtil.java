@@ -12,34 +12,34 @@ import org.bukkit.potion.PotionEffect;
 
 @UtilityClass
 public class PlayerUtil {
-	public static void clearPlayer(Player player) {
-		for (PotionEffect effect : player.getActivePotionEffects()) {
-			player.removePotionEffect(effect.getType());
-		}
+    public static void clearPlayer(Player player) {
+        for (PotionEffect effect : player.getActivePotionEffects()) {
+            player.removePotionEffect(effect.getType());
+        }
 
-		EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
-		Inventory craftingInventory = entityPlayer.activeContainer.getBukkitView().getTopInventory();
+        EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
+        Inventory craftingInventory = entityPlayer.activeContainer.getBukkitView().getTopInventory();
 
-		if (craftingInventory instanceof CraftingInventory) {
-			craftingInventory.clear();
-		}
+        if (craftingInventory instanceof CraftingInventory) {
+            craftingInventory.clear();
+        }
 
-		player.setHealth(player.getMaxHealth());
-		player.setMaximumNoDamageTicks(20);
-		player.setFallDistance(0.0F);
-		player.setFoodLevel(20);
-		player.setSaturation(5.0F);
-		player.setFireTicks(0);
-		player.setGameMode(GameMode.SURVIVAL);
-		player.setAllowFlight(false);
-		player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
-		player.getInventory().clear();
-		player.getInventory().setArmorContents(null);
-		player.setItemOnCursor(null);
-		player.updateInventory();
-	}
+        player.setHealth(player.getMaxHealth());
+        player.setMaximumNoDamageTicks(20);
+        player.setFallDistance(0.0F);
+        player.setFoodLevel(20);
+        player.setSaturation(5.0F);
+        player.setFireTicks(0);
+        player.setGameMode(GameMode.SURVIVAL);
+        player.setAllowFlight(false);
+        player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+        player.getInventory().clear();
+        player.getInventory().setArmorContents(null);
+        player.setItemOnCursor(null);
+        player.updateInventory();
+    }
 
-	public static int getPing(Player player) {
-		return ((CraftPlayer) player).getHandle().ping;
-	}
+    public static int getPing(Player player) {
+        return ((CraftPlayer) player).getHandle().ping;
+    }
 }

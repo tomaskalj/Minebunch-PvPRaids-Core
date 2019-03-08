@@ -7,20 +7,20 @@ import lombok.RequiredArgsConstructor;
 // TODO: load messages from db?
 @RequiredArgsConstructor
 public class BroadcastTask implements Runnable {
-	private static final String[] MESSAGES = {
-			"Test"
-	};
-	private final CorePlugin plugin;
-	private int currentIndex;
+    private static final String[] MESSAGES = {
+            "Test"
+    };
+    private final CorePlugin plugin;
+    private int currentIndex;
 
-	@Override
-	public void run() {
-		String message = MESSAGES[currentIndex];
+    @Override
+    public void run() {
+        String message = MESSAGES[currentIndex];
 
-		plugin.getServerManager().broadcastAlert(Colors.PRIMARY + message);
+        plugin.getServerManager().broadcastAlert(Colors.PRIMARY + message);
 
-		if (++currentIndex == MESSAGES.length) {
-			currentIndex = 0;
-		}
-	}
+        if (++currentIndex == MESSAGES.length) {
+            currentIndex = 0;
+        }
+    }
 }

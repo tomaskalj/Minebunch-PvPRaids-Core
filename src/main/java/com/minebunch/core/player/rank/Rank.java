@@ -8,53 +8,53 @@ import org.bukkit.entity.Player;
 
 @Getter
 public enum Rank {
-	OWNER("Owner", Colors.D_RED),
-	DEVELOPER("Developer", Colors.AQUA),
-	ADMIN("Admin", Colors.RED),
-	MOD("Mod", Colors.PURPLE),
-	MEDIA("Media", Colors.PINK),
-	SPONSOR("Sponsor", Colors.GOLD),
-	MVP("MVP", Colors.BLUE),
-	VIP("VIP", Colors.GREEN),
-	MEMBER("Member", Colors.WHITE);
+    OWNER("Owner", Colors.D_RED),
+    DEVELOPER("Developer", Colors.AQUA),
+    ADMIN("Admin", Colors.RED),
+    MOD("Mod", Colors.PURPLE),
+    MEDIA("Media", Colors.PINK),
+    SPONSOR("Sponsor", Colors.GOLD),
+    MVP("MVP", Colors.BLUE),
+    VIP("VIP", Colors.GREEN),
+    MEMBER("Member", Colors.WHITE);
 
-	public static final Rank LOWEST_STAFF = MOD;
-	public static final Rank LOWEST_DONOR = VIP;
+    public static final Rank LOWEST_STAFF = MOD;
+    public static final Rank LOWEST_DONOR = VIP;
 
-	public static final String ORDERED_RANKS = Arrays.stream(values())
-			.map(rank -> rank.getColor() + rank.getName() + Colors.R)
-			.collect(Collectors.joining(", "));
+    public static final String ORDERED_RANKS = Arrays.stream(values())
+            .map(rank -> rank.getColor() + rank.getName() + Colors.R)
+            .collect(Collectors.joining(", "));
 
-	private final String name;
-	private final String rawFormat;
-	private final String format;
-	private final String color;
+    private final String name;
+    private final String rawFormat;
+    private final String format;
+    private final String color;
 
-	Rank(String name, String color) {
-		this(name, "%s", color);
-	}
+    Rank(String name, String color) {
+        this(name, "%s", color);
+    }
 
-	Rank(String name, String rawFormat, String color) {
-		this.name = name;
-		this.rawFormat = rawFormat;
-		this.format = String.format(rawFormat, color, color);
-		this.color = color;
-	}
+    Rank(String name, String rawFormat, String color) {
+        this.name = name;
+        this.rawFormat = rawFormat;
+        this.format = String.format(rawFormat, color, color);
+        this.color = color;
+    }
 
-	public static Rank getByName(String name) {
-		for (Rank rank : values()) {
-			if (rank.name().equalsIgnoreCase(name)) {
-				return rank;
-			}
-		}
+    public static Rank getByName(String name) {
+        for (Rank rank : values()) {
+            if (rank.name().equalsIgnoreCase(name)) {
+                return rank;
+            }
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	public void apply(Player player) {
-		String coloredName = color + player.getName();
+    public void apply(Player player) {
+        String coloredName = color + player.getName();
 
-		player.setPlayerListName(coloredName);
-		player.setDisplayName(coloredName);
-	}
+        player.setPlayerListName(coloredName);
+        player.setDisplayName(coloredName);
+    }
 }

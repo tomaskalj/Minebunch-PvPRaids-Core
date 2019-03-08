@@ -9,5 +9,7 @@ public class JedisSettings {
     private final int port;
     private final String password;
 
-    public boolean hasPassword(){return password != null && !password.isEmpty();}
+    public boolean hasPassword() {
+        return password != null && !password.isEmpty();
+    }
 }

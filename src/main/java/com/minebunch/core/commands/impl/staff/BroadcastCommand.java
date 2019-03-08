@@ -9,29 +9,29 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 public class BroadcastCommand extends BaseCommand {
-	private final CorePlugin plugin;
+    private final CorePlugin plugin;
 
-	public BroadcastCommand(CorePlugin plugin) {
-		super("broadcast", Rank.ADMIN);
-		this.plugin = plugin;
-		setAliases("bc");
-		setUsage(Colors.RED + "Usage: /broadcast <message> [-r]");
-	}
+    public BroadcastCommand(CorePlugin plugin) {
+        super("broadcast", Rank.ADMIN);
+        this.plugin = plugin;
+        setAliases("bc");
+        setUsage(Colors.RED + "Usage: /broadcast <message> [-r]");
+    }
 
-	@Override
-	protected void execute(CommandSender sender, String[] args) {
-		if (args.length == 0) {
-			sender.sendMessage(usageMessage);
-			return;
-		}
+    @Override
+    protected void execute(CommandSender sender, String[] args) {
+        if (args.length == 0) {
+            sender.sendMessage(usageMessage);
+            return;
+        }
 
-		String message = Colors.RED + "[Alert] " + Colors.R
-				+ ChatColor.translateAlternateColorCodes('&', StringUtil.buildString(args, 0)).trim();
+        String message = Colors.RED + "[Alert] " + Colors.R
+                + ChatColor.translateAlternateColorCodes('&', StringUtil.buildString(args, 0)).trim();
 
-		if (message.endsWith(" -r")) {
-			message = message.substring(12, message.length() - 3).trim();
-		}
+        if (message.endsWith(" -r")) {
+            message = message.substring(12, message.length() - 3).trim();
+        }
 
-		plugin.getServer().broadcastMessage(message);
-	}
+        plugin.getServer().broadcastMessage(message);
+    }
 }

@@ -13,13 +13,12 @@ import redis.clients.jedis.JedisPool;
 
 @Getter
 public class JedisManager {
-
     private JedisSettings settings;
     private JedisPool pool;
     private JedisPublisher publisher;
     private JedisSubscriber subscriber;
 
-    public JedisManager(){
+    public JedisManager() {
         Config config = CorePlugin.getInstance().getServerConfig();
 
         String host = config.getString("redis.host");
@@ -29,14 +28,14 @@ public class JedisManager {
         settings = new JedisSettings(host, port, password);
         pool = new JedisPool(settings.getAddress(), settings.getPort());
 
-        try(Jedis jedis = pool.getResource()){
+        try (Jedis jedis = pool.getResource()) {
             if (settings.hasPassword()) jedis.auth(settings.getPassword());
             publisher = new JedisPublisher(settings);
             subscriber = new JedisSubscriber("core", settings, new JedisSubscriptionHandler());
         }
     }
 
-    public boolean isActive(){
+    public boolean isActive() {
         return this.pool != null && !this.pool.isClosed();
     }
 

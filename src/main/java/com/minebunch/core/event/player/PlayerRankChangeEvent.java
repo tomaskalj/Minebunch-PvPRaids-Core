@@ -9,23 +9,23 @@ import org.bukkit.event.player.PlayerEvent;
 
 @Getter
 public class PlayerRankChangeEvent extends PlayerEvent {
-	private static final HandlerList HANDLERS = new HandlerList();
-	private final CoreProfile profile;
-	private final Rank newRank, oldRank;
+    private static final HandlerList HANDLERS = new HandlerList();
+    private final CoreProfile profile;
+    private final Rank newRank, oldRank;
 
-	public PlayerRankChangeEvent(Player who, CoreProfile profile, Rank newRank, Rank oldRank) {
-		super(who);
-		this.profile = profile;
-		this.newRank = newRank;
-		this.oldRank = oldRank;
-	}
+    public PlayerRankChangeEvent(Player who, CoreProfile profile, Rank newRank, Rank oldRank) {
+        super(who);
+        this.profile = profile;
+        this.newRank = newRank;
+        this.oldRank = oldRank;
+    }
 
-	public static HandlerList getHandlerList() {
-		return HANDLERS;
-	}
+    public static HandlerList getHandlerList() {
+        return HANDLERS;
+    }
 
-	@Override
-	public HandlerList getHandlers() {
-		return HANDLERS;
-	}
+    @Override
+    public HandlerList getHandlers() {
+        return HANDLERS;
+    }
 }

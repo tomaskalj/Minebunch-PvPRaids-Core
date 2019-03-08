@@ -5,19 +5,19 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.server.ServerEvent;
 
-public @Data @AllArgsConstructor class RedisServerSaveEvent extends Event {
-
-    private ServerModel server;
+public @Data
+@AllArgsConstructor
+class RedisServerSaveEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
+    private ServerModel server;
 
-    public HandlerList getHandlers() {
+    public static HandlerList getHandlerList() {
         return handlers;
     }
 
-    public static HandlerList getHandlerList() {
+    public HandlerList getHandlers() {
         return handlers;
     }
 

@@ -3,17 +3,16 @@ package com.minebunch.core.jedis.cache;
 import com.minebunch.core.CorePlugin;
 import com.minebunch.core.utils.ProfileUtil;
 import com.minebunch.core.utils.data.AtomicString;
-import org.bukkit.Bukkit;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import org.bukkit.Bukkit;
 
-public class UUIDCache implements JedisCache<String, UUID>{
+public class UUIDCache implements JedisCache<String, UUID> {
     private Map<String, UUID> nameToUuid = new HashMap<>();
     private Map<UUID, String> uuidToName = new HashMap<>();
 
-    public UUIDCache(){
+    public UUIDCache() {
         startRunnable();
     }
 
@@ -31,9 +30,9 @@ public class UUIDCache implements JedisCache<String, UUID>{
         // If Redis does not have uuid cached, try to look through the Mojang API. Else return the result from Redis
         if (atomic.getString() == null) {
             ProfileUtil.MojangProfile mojangProfile = ProfileUtil.lookupProfile(uuid);
-            if (mojangProfile != null){
+            if (mojangProfile != null) {
                 return mojangProfile.getName();
-            }else{
+            } else {
                 return "Unknown";
             }
         } else {
@@ -41,9 +40,9 @@ public class UUIDCache implements JedisCache<String, UUID>{
         }
     }
 
-    private void startRunnable(){
+    private void startRunnable() {
         // Runnable every minute to fetch from Redis
-        Bukkit.getScheduler().runTaskTimerAsynchronously(CorePlugin.getInstance(), ()->{
+        Bukkit.getScheduler().runTaskTimerAsynchronously(CorePlugin.getInstance(), () -> {
             // Check for exceptions during the fetching process
             try {
                 this.fetch();
@@ -68,9 +67,9 @@ public class UUIDCache implements JedisCache<String, UUID>{
         // If Redis does not have name cached, try to look through the Mojang API. Else return the result from Redis
         if (atomic.getString() == null) {
             ProfileUtil.MojangProfile mojangProfile = ProfileUtil.lookupProfile(name);
-            if (mojangProfile != null){
+            if (mojangProfile != null) {
                 return mojangProfile.getId();
-            }else{
+            } else {
                 return null;
             }
         } else {
@@ -100,7 +99,7 @@ public class UUIDCache implements JedisCache<String, UUID>{
     }
 
     public void write(String name, UUID uuid) {
-        if (!CorePlugin.getInstance().getJedisManager().isActive())return;
+        if (!CorePlugin.getInstance().getJedisManager().isActive()) return;
 
         nameToUuid.put(name.toLowerCase(), uuid);
         uuidToName.put(uuid, name);

@@ -2,27 +2,25 @@ package com.minebunch.core.jedis.pubsub;
 
 import com.google.gson.JsonObject;
 import com.minebunch.core.CorePlugin;
-import com.minebunch.core.event.player.PlayerTagChangeEvent;
 import com.minebunch.core.jedis.json.JsonMessages;
 import com.minebunch.core.jedis.json.JsonPayloadType;
 import com.minebunch.core.player.rank.Rank;
-import com.minebunch.core.utils.message.Colors;
 
 public class JedisSubscriptionHandler {
 
-    public void processJson(JsonObject json){
+    public void processJson(JsonObject json) {
         JsonPayloadType type;
 
-        try{
+        try {
             type = JsonPayloadType.valueOf(json.get("type").getAsString());
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             CorePlugin.getInstance().getLogger().warning("Could not parse an incoming Json object!");
             return;
         }
 
         JsonObject data = json.get("data").getAsJsonObject();
 
-        switch(type){
+        switch (type) {
             case STAFF_CHAT: {
                 String serverName = data.get("server_name").getAsString();
                 String playerRank = data.get("player_rank").getAsString();
@@ -30,7 +28,7 @@ public class JedisSubscriptionHandler {
                 String playerMessage = data.get("message").getAsString();
 
                 Rank rank = Rank.getByName(playerRank);
-                if (rank == null){
+                if (rank == null) {
                     CorePlugin.getInstance().getLogger().warning("Invalid rank name passed in Json message!");
                     return;
                 }
@@ -50,7 +48,7 @@ public class JedisSubscriptionHandler {
                 String playerName = data.get("player_name").getAsString();
 
                 Rank rank = Rank.getByName(playerRank);
-                if (rank == null){
+                if (rank == null) {
                     CorePlugin.getInstance().getLogger().warning("Invalid rank name passed in Json message!");
                     return;
                 }
