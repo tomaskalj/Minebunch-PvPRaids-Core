@@ -6,7 +6,7 @@ import com.minebunch.core.jedis.json.JsonPayloadType;
 import com.minebunch.core.jedis.pubsub.JedisPublisher;
 import com.minebunch.core.jedis.pubsub.JedisSubscriber;
 import com.minebunch.core.jedis.pubsub.JedisSubscriptionHandler;
-import com.minebunch.core.storage.flatfile.Config;
+import com.minebunch.core.utils.storage.Config;
 import lombok.Getter;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;

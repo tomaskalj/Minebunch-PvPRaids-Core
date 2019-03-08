@@ -6,6 +6,7 @@ import com.minebunch.core.event.player.PlayerRankChangeEvent;
 import com.minebunch.core.player.CoreProfile;
 import com.minebunch.core.player.rank.Rank;
 import com.minebunch.core.storage.database.MongoRequest;
+import com.minebunch.core.utils.TaskUtil;
 import com.minebunch.core.utils.message.Colors;
 import com.minebunch.core.utils.message.Strings;
 import java.util.UUID;
@@ -47,10 +48,11 @@ public class RankCommand extends BaseCommand {
         Player target = plugin.getServer().getPlayer(args[0]);
 
         if (target == null) {
-            plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
-                UUID uuid = CorePlugin.getInstance().getUuidCache().getUuid(args[0]);
-                if (uuid != null && plugin.getMongoStorage().getDocument("players", uuid) != null) {
-                    MongoRequest.newRequest("players", uuid)
+            TaskUtil.runAsync(plugin, () -> {
+                UUID id = CorePlugin.getInstance().getUuidCache().getUuid(args[0]);
+
+                if (id != null && plugin.getMongoStorage().getDocument("players", id) != null) {
+                    MongoRequest.newRequest("players", id)
                             .put("rank_name", rank.name())
                             .run();
 
@@ -67,11 +69,9 @@ public class RankCommand extends BaseCommand {
             sender.sendMessage(Colors.GREEN + "Set " + target.getName() + "'s rank to "
                     + rank.getColor() + rank.getName() + Colors.GREEN + ".");
 
-            plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
-                MongoRequest.newRequest("players", targetProfile.getId())
-                        .put("rank_name", rank.name())
-                        .run();
-            });
+            TaskUtil.runAsync(plugin, () -> MongoRequest.newRequest("players", targetProfile.getId())
+                    .put("rank_name", rank.name())
+                    .run());
         }
     }
 }

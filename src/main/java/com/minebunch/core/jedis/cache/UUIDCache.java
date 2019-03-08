@@ -2,11 +2,11 @@ package com.minebunch.core.jedis.cache;
 
 import com.minebunch.core.CorePlugin;
 import com.minebunch.core.utils.ProfileUtil;
+import com.minebunch.core.utils.TaskUtil;
 import com.minebunch.core.utils.data.AtomicString;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import org.bukkit.Bukkit;
 
 public class UUIDCache implements JedisCache<String, UUID> {
     private Map<String, UUID> nameToUuid = new HashMap<>();
@@ -42,14 +42,15 @@ public class UUIDCache implements JedisCache<String, UUID> {
 
     private void startRunnable() {
         // Runnable every minute to fetch from Redis
-        Bukkit.getScheduler().runTaskTimerAsynchronously(CorePlugin.getInstance(), () -> {
-            // Check for exceptions during the fetching process
-            try {
-                this.fetch();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }, 0L, 20L * 60L * 2L);
+        TaskUtil.runAsyncRepeating(CorePlugin.getInstance(),
+                () -> {
+                    // Check for exceptions during the fetching process
+                    try {
+                        this.fetch();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }, 20 * 60 * 2);
     }
 
     public UUID getUuid(String name) {

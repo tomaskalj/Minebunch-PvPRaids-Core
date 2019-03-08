@@ -2,7 +2,7 @@ package com.minebunch.core.punishment;
 
 import com.minebunch.core.CorePlugin;
 import com.minebunch.core.storage.database.MongoRequest;
-import com.minebunch.core.utils.TimeUtil;
+import com.minebunch.core.utils.time.TimeUtil;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;

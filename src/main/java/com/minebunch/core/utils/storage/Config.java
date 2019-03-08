@@ -1,4 +1,4 @@
-package com.minebunch.core.storage.flatfile;
+package com.minebunch.core.utils.storage;
 
 import com.minebunch.core.utils.structure.Cuboid;
 import java.io.File;
