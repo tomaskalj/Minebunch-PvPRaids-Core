@@ -55,7 +55,7 @@ public class MuteCommand extends BaseCommand{
         int duration = TimeUtil.parseTime(time);
         if (duration == 0) {
             sender.sendMessage(ChatColor.RED + "Failed to parse the given duration string.");
-            sender.sendMessage(ChatColor.RED + "Example syntax: 2m3w1d2h (2 months, 3 weeks, 1 day, and 2 hours)");
+            sender.sendMessage(ChatColor.RED + "Example syntax: 1m4w2d1h (1 month, 4 weeks, 2 days, and 1 hour)");
             return;
         }
 
