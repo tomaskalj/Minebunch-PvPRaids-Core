@@ -34,7 +34,13 @@ public class PunishmentManager {
     }
 
     public void addPunishment(UUID playerUuid, Punishment punishment){
-        punishmentMap.get(playerUuid).add(punishment);
+        Set<Punishment> punishments = punishmentMap.get(playerUuid);
+        punishments.removeIf(check -> check.getPunishmentUuid().equals(punishment.getPunishmentUuid()));
+        punishments.add(punishment);
+    }
+
+    public Punishment getActiveBan(UUID playerUuid){
+        return searchPunishment(playerUuid, true);
     }
 
     public Punishment getActiveBan(UUID playerUuid, String loginAddress){
@@ -105,6 +111,8 @@ public class PunishmentManager {
         sharedPunishment.setSilent(punishment.isSilent());
         sharedPunishment.setAltUuid(punishment.getTargetUuid());
         sharedPunishment.setAltName(punishment.getTargetName());
+        sharedPunishment.setRemovedBy(punishment.getRemovedBy());
+        sharedPunishment.setRemoveReason(punishment.getRemoveReason());
         return sharedPunishment;
     }
 }

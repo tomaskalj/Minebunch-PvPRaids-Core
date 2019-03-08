@@ -33,6 +33,7 @@ public class PunishmentHandler implements JsonPayloadHandler{
 
         CorePlugin.getInstance().getPunishmentManager().addPunishment(player.getUniqueId(), punishment);
 
+        if (!punishment.isActive())return;
         if (punishment.isBan()) {
             // Separate messages for direct bans and shared bans
             String message;

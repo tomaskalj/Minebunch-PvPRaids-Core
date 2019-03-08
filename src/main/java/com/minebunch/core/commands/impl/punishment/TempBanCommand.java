@@ -5,6 +5,7 @@ import com.minebunch.core.CorePlugin;
 import com.minebunch.core.commands.BaseCommand;
 import com.minebunch.core.jedis.json.payloads.JsonPayload;
 import com.minebunch.core.jedis.json.payloads.PayloadType;
+import com.minebunch.core.player.rank.Rank;
 import com.minebunch.core.punishment.Punishment;
 import com.minebunch.core.punishment.PunishmentType;
 import com.minebunch.core.utils.json.JsonChain;
@@ -23,7 +24,7 @@ public class TempBanCommand extends BaseCommand{
     private static final String USAGE_MESSAGE = ChatColor.RED + "tempban <player> [time] [reason] [-s]";
 
     public TempBanCommand() {
-        super("tempban");
+        super("tempban", Rank.ADMIN);
     }
 
     @Override
@@ -87,23 +88,6 @@ public class TempBanCommand extends BaseCommand{
         punishment.setExpiration(new Timestamp(System.currentTimeMillis() + duration));
         punishment.save(false);
 
-        sendJsonPayload(punishment, staffName, targetPlayerName);
-
-        Document playerDocument = CorePlugin.getInstance().getMongoStorage().getDocumentByFilter("players", "uuid",
-                targetUuid);
-        List<UUID> alts = playerDocument.getList("known_alts", UUID.class);
-
-        // Send a separate payload for each alt, so that all online alts get kicked.
-        for (UUID altUuid : alts){
-            Punishment shared = CorePlugin.getInstance().getPunishmentManager()
-                    .createSharedPunishment(punishment, altUuid);
-            shared.save(false);
-
-            sendJsonPayload(shared, staffName, targetPlayerName);
-        }
-    }
-
-    private void sendJsonPayload(Punishment punishment, String staffName, String targetPlayerName){
         JsonObject data = new JsonChain()
                 .addProperty("punishment_uuid", punishment.getPunishmentUuid().toString())
                 .addProperty("staff_name", staffName)
@@ -111,5 +95,16 @@ public class TempBanCommand extends BaseCommand{
                 .get();
 
         CorePlugin.getInstance().getJedisManager().write(new JsonPayload(PayloadType.PUNISHMENT, data));
+
+        Document playerDocument = CorePlugin.getInstance().getMongoStorage().getDocumentByFilter("players", "uuid",
+                targetUuid);
+        List<UUID> alts = playerDocument.getList("known_alts", UUID.class);
+
+        // Also create a shared punishment for the alts
+        for (UUID altUuid : alts){
+            Punishment shared = CorePlugin.getInstance().getPunishmentManager()
+                    .createSharedPunishment(punishment, altUuid);
+            shared.save(false);
+        }
     }
 }

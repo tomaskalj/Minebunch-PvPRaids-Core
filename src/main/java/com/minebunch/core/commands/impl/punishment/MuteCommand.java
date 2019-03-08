@@ -5,6 +5,7 @@ import com.minebunch.core.CorePlugin;
 import com.minebunch.core.commands.BaseCommand;
 import com.minebunch.core.jedis.json.payloads.JsonPayload;
 import com.minebunch.core.jedis.json.payloads.PayloadType;
+import com.minebunch.core.player.rank.Rank;
 import com.minebunch.core.punishment.Punishment;
 import com.minebunch.core.punishment.PunishmentType;
 import com.minebunch.core.utils.json.JsonChain;
@@ -21,7 +22,7 @@ public class MuteCommand extends BaseCommand{
     private static final String USAGE_MESSAGE = ChatColor.RED + "mute <player> [time] [reason]";
 
     public MuteCommand() {
-        super("mute");
+        super("mute", Rank.LOWEST_STAFF);
     }
 
     @Override
@@ -34,7 +35,7 @@ public class MuteCommand extends BaseCommand{
         String targetPlayerName = args[0];
         String time = args[1];
 
-        StringBuilder builder = new StringBuilder();
+        StringBuilder builder = new StringBuilder("");
         for (int i = 2; i < args.length; i++){
             builder.append(args[i]);
             if (i < args.length - 1) builder.append(" ");

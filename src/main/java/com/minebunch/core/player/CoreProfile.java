@@ -47,6 +47,7 @@ public class CoreProfile extends PlayerProfile {
     private long lastChatTime;
     private Timer chatCooldownTimer;
 
+    // TODO: optimize loading and saving
     public CoreProfile(String name, UUID id, String address) {
         super(id, "players");
         this.name = name;
@@ -131,7 +132,7 @@ public class CoreProfile extends PlayerProfile {
         return String.format(getVisibleRank().getRawFormat(), rankColor) + name;
     }
 
-    public void findAlts(){
+    private void findAlts(){
         if (this.currentAddress != null) {
             try (MongoCursor<Document> cursor = CorePlugin.getInstance().getMongoStorage().getDocumentsByFilter(
                     getCollectionName(), "last_address", currentAddress)) {

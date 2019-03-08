@@ -5,6 +5,7 @@ import com.minebunch.core.CorePlugin;
 import com.minebunch.core.commands.BaseCommand;
 import com.minebunch.core.jedis.json.payloads.JsonPayload;
 import com.minebunch.core.jedis.json.payloads.PayloadType;
+import com.minebunch.core.player.rank.Rank;
 import com.minebunch.core.punishment.Punishment;
 import com.minebunch.core.punishment.PunishmentType;
 import com.minebunch.core.utils.json.JsonChain;
@@ -22,7 +23,7 @@ public class BanCommand extends BaseCommand {
     private static final String USAGE_MESSAGE = ChatColor.RED + "ban <player> [reason] [-s]";
 
     public BanCommand() {
-        super("ban");
+        super("ban", Rank.LOWEST_STAFF);
     }
 
     @Override
@@ -34,7 +35,7 @@ public class BanCommand extends BaseCommand {
 
         String targetPlayerName = args[0];
 
-        StringBuilder builder = new StringBuilder();
+        StringBuilder builder = new StringBuilder("");
         for (int i = 1; i < args.length; i++){
             builder.append(args[i]);
             if (i < args.length - 1) builder.append(" ");
@@ -44,6 +45,11 @@ public class BanCommand extends BaseCommand {
         UUID targetUuid = CorePlugin.getInstance().getUuidCache().getUuid(targetPlayerName);
         if (targetUuid == null){
             sender.sendMessage(ChatColor.RED + "Could not find that player! Did you type the name correctly?");
+            return;
+        }
+
+        if (CorePlugin.getInstance().getPunishmentManager().getActiveBan(targetUuid) != null) {
+            sender.sendMessage(ChatColor.RESET + targetPlayerName + ChatColor.RED + " is already banned.");
             return;
         }
 
