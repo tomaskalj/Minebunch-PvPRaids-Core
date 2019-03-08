@@ -26,7 +26,7 @@ public class StaffJoinHandler implements JsonPayloadHandler {
                 .replace("{player_rank_colour}", rank.getColor())
                 .replace("{player_name}", playerName);
 
-        if (serverName.equalsIgnoreCase(CorePlugin.getInstance().getServerName())) {
+        if (serverName.equalsIgnoreCase(CorePlugin.getInstance().getCoreConfig().getServerName())) {
             return;
         }
 

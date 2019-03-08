@@ -68,4 +68,11 @@ public abstract class PlayerProfile {
      * @param serialized - The Document retrieved from mongo
      */
     public abstract void deserialize(Document serialized);
+
+    /**
+     * Simply returns the name of the collection that is being used in mongo to store the profile
+     */
+    public String getCollectionName() {
+        return collectionName;
+    }
 }

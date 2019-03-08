@@ -8,6 +8,7 @@ import com.minebunch.core.jedis.json.payloads.JsonPayload;
 import com.minebunch.core.jedis.json.payloads.PayloadType;
 import com.minebunch.core.player.CoreProfile;
 import com.minebunch.core.player.rank.Rank;
+import com.minebunch.core.punishment.Punishment;
 import com.minebunch.core.utils.StringUtil;
 import com.minebunch.core.utils.json.JsonChain;
 import com.minebunch.core.utils.message.Colors;
@@ -59,6 +60,26 @@ public class PlayerListener implements Listener {
         String host = address.getHostAddress();
 
         CorePlugin.getInstance().getUuidCache().write(event.getName(), uuid);
+        CorePlugin.getInstance().getPunishmentManager().loadPunishments(uuid);
+
+        Punishment activeBan = CorePlugin.getInstance().getPunishmentManager().getActiveBan(uuid);
+        if (activeBan != null) {
+            event.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_BANNED);
+
+            String message;
+            if (activeBan.isShared()) {
+                message = activeBan.getType().getSharedMessage().replace("{player}", activeBan.getAltName());
+            }else{
+                message = activeBan.getType().getMessage();
+            }
+
+            message = message.replace("{expire}", activeBan.getTimeLeft())
+                    .replace("{server_name}", CorePlugin.getInstance().getCoreConfig().getServerName())
+                    .replace("{server_site}", CorePlugin.getInstance().getCoreConfig().getSiteName());
+
+            event.setKickMessage(message);
+            return;
+        }
 
         if (event.getLoginResult() == AsyncPlayerPreLoginEvent.Result.ALLOWED) {
             plugin.getProfileManager().createProfile(event.getName(), uuid, address.getHostAddress());
@@ -173,7 +194,7 @@ public class PlayerListener implements Listener {
             JsonObject data = new JsonChain()
                     .addProperty("player_rank", profile.getRank().getName())
                     .addProperty("player_name", player.getName())
-                    .addProperty("server_name", CorePlugin.getInstance().getServerName())
+                    .addProperty("server_name", CorePlugin.getInstance().getCoreConfig().getServerName())
                     .get();
 
             plugin.getJedisManager().write(new JsonPayload(PayloadType.STAFF_JOIN, data));
@@ -249,7 +270,7 @@ public class PlayerListener implements Listener {
             event.setCancelled(true);
 
             JsonObject data = new JsonChain()
-                    .addProperty("server_name", CorePlugin.getInstance().getServerName())
+                    .addProperty("server_name", CorePlugin.getInstance().getCoreConfig().getServerName())
                     .addProperty("player_rank", profile.getRank().getName())
                     .addProperty("player_name", player.getName())
                     .addProperty("message", msg)

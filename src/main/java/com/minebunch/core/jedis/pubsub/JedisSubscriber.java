@@ -4,9 +4,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.minebunch.core.jedis.JedisSettings;
+import lombok.Getter;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPubSub;
 
+@Getter
 public class JedisSubscriber {
     private static final JsonParser JSON_PARSER = new JsonParser();
     private final String channel;

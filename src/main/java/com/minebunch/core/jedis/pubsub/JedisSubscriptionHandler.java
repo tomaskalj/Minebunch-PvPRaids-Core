@@ -7,6 +7,7 @@ import com.minebunch.core.jedis.json.payloads.handler.JsonPayloadHandler;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 
+
 @RequiredArgsConstructor
 public class JedisSubscriptionHandler {
     private final JedisManager manager;

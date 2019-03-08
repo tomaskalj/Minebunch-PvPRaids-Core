@@ -20,17 +20,25 @@ public class Punishment {
 
     private static final String collectionName = "punishments";
 
-    private UUID uuid;
+    private UUID punishmentUuid;
     private PunishmentType type;
     private UUID targetUuid;
+
     private UUID addedBy;
     private String addedReason;
+
     private UUID removedBy;
     private String removeReason;
+
     private Timestamp timestamp;
     private Timestamp expiration;
+
     private boolean hidden;
     private boolean silent = true;
+
+    private boolean isShared = false;
+    private String altName;
+    private UUID altUuid;
 
     public boolean isBan() {
         return this.type == PunishmentType.TEMPBAN || this.type == PunishmentType.BAN || this.type == PunishmentType
@@ -71,38 +79,36 @@ public class Punishment {
         return TimeUtil.formatDateDiff(from, to);
     }
 
-    public void load() {
-        CorePlugin.getInstance().getMongoStorage().getOrCreateDocument(collectionName, uuid, (document, exists) -> {
-            this.uuid = UUID.fromString(document.getString("uuid"));
-            this.type = PunishmentType.valueOf(document.getString("type"));
-            this.targetUuid = UUID.fromString(document.getString("target_uuid"));
-            this.addedReason = document.getString("added_reason");
-            this.timestamp = new Timestamp(document.getLong("timestamp"));
-            this.hidden = document.getBoolean("hidden");
-            this.silent = document.getBoolean("silent");
+    public void load(Document document) {
+        this.punishmentUuid = UUID.fromString(document.getString("punishmentUuid"));
+        this.type = PunishmentType.valueOf(document.getString("type"));
+        this.targetUuid = UUID.fromString(document.getString("target_uuid"));
+        this.addedReason = document.getString("added_reason");
+        this.timestamp = new Timestamp(document.getLong("timestamp"));
+        this.hidden = document.getBoolean("hidden");
+        this.silent = document.getBoolean("silent");
 
-            if (document.containsKey("added_by")) {
-                this.addedBy = UUID.fromString(document.getString("added_by"));
-            }
+        if (document.containsKey("added_by")) {
+            this.addedBy = UUID.fromString(document.getString("added_by"));
+        }
 
-            if (document.containsKey("removed_by")) {
-                this.removedBy = UUID.fromString(document.getString("removed_by"));
-            }
+        if (document.containsKey("removed_by")) {
+            this.removedBy = UUID.fromString(document.getString("removed_by"));
+        }
 
-            if (document.containsKey("remove_reason")) {
-                this.removeReason = document.getString("remove_reason");
-            }
+        if (document.containsKey("remove_reason")) {
+            this.removeReason = document.getString("remove_reason");
+        }
 
-            if (document.containsKey("expiration")) {
-                this.expiration = new Timestamp(document.getLong("expiration"));
-            }
-        });
+        if (document.containsKey("expiration")) {
+            this.expiration = new Timestamp(document.getLong("expiration"));
+        }
     }
 
     public void save(boolean async) {
         Document document = new Document();
 
-        document.put("uuid", this.uuid.toString());
+        document.put("punishment_uuid", this.punishmentUuid.toString());
         document.put("type", this.type.name());
         document.put("target_uuid", this.targetUuid.toString());
         document.put("added_reason", this.addedReason);

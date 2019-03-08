@@ -40,6 +40,11 @@ public class MongoStorage {
         return collection.find().iterator();
     }
 
+    public MongoCursor<Document> getDocumentsByFilter(String collectionName, String filter, Object documentObject) {
+        MongoCollection<Document> collection = database.getCollection(collectionName);
+        return collection.find(Filters.eq(filter, documentObject)).iterator();
+    }
+
     public Document getDocumentByFilter(String collectionName, String filter, Object documentObject) {
         MongoCollection<Document> collection = database.getCollection(collectionName);
         return collection.find(Filters.eq(filter, documentObject)).first();

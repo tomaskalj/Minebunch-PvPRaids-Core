@@ -36,6 +36,7 @@ import com.minebunch.core.listeners.PlayerListener;
 import com.minebunch.core.managers.ProfileManager;
 import com.minebunch.core.managers.ServerManager;
 import com.minebunch.core.managers.StaffManager;
+import com.minebunch.core.punishment.PunishmentManager;
 import com.minebunch.core.server.filter.Filter;
 import com.minebunch.core.storage.database.MongoStorage;
 import com.minebunch.core.task.BroadcastTask;
@@ -60,8 +61,7 @@ public class CorePlugin extends JavaPlugin {
     @Getter
     private static boolean isServerEnabled = false;
 
-    private Config serverConfig;
-    private String serverName;
+    private CoreConfig coreConfig;
 
     private Filter filter;
     private MongoStorage mongoStorage;
@@ -69,6 +69,7 @@ public class CorePlugin extends JavaPlugin {
     private StaffManager staffManager;
     private ServerManager serverManager;
     private JedisManager jedisManager;
+    private PunishmentManager punishmentManager;
 
     private UUIDCache uuidCache;
 
@@ -85,8 +86,7 @@ public class CorePlugin extends JavaPlugin {
 
         registerSerializableClass(Cuboid.class);
 
-        serverConfig = new Config(this, "config");
-        serverName = serverConfig.getString("server.name");
+        coreConfig = new CoreConfig(this);
 
         filter = new Filter();
         mongoStorage = new MongoStorage();
@@ -94,6 +94,7 @@ public class CorePlugin extends JavaPlugin {
         staffManager = new StaffManager(this);
         serverManager = new ServerManager();
         jedisManager = new JedisManager();
+        punishmentManager = new PunishmentManager();
 
         uuidCache = new UUIDCache();
 

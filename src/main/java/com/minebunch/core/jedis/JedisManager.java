@@ -5,6 +5,7 @@ import com.minebunch.core.CorePlugin;
 import com.minebunch.core.jedis.json.payloads.JsonPayload;
 import com.minebunch.core.jedis.json.payloads.PayloadType;
 import com.minebunch.core.jedis.json.payloads.handler.JsonPayloadHandler;
+import com.minebunch.core.jedis.json.payloads.handler.impl.PunishmentHandler;
 import com.minebunch.core.jedis.json.payloads.handler.impl.StaffChatHandler;
 import com.minebunch.core.jedis.json.payloads.handler.impl.StaffJoinHandler;
 import com.minebunch.core.jedis.pubsub.JedisPublisher;
@@ -17,9 +18,9 @@ import lombok.Getter;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
+@Getter
 public class JedisManager {
     private final EnumMap<PayloadType, JsonPayloadHandler> payloadHandlers = new EnumMap<>(PayloadType.class);
-    @Getter
     private final JedisPool pool;
     private final JedisPublisher publisher;
     private final JedisSubscriber subscriber;
@@ -27,8 +28,9 @@ public class JedisManager {
     public JedisManager() {
         registerPayloadHandler(new StaffJoinHandler());
         registerPayloadHandler(new StaffChatHandler());
+        registerPayloadHandler(new PunishmentHandler());
 
-        Config config = CorePlugin.getInstance().getServerConfig();
+        Config config = CorePlugin.getInstance().getCoreConfig();
         String host = config.getString("redis.host");
         int port = config.getInt("redis.port");
         String password = config.getString("redis.password");
