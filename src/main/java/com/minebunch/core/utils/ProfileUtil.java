@@ -15,6 +15,7 @@ import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+// TODO integrate into UUID cache
 @Deprecated
 @UtilityClass
 public final class ProfileUtil {

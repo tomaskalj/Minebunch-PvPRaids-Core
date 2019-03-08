@@ -4,6 +4,7 @@ import com.minebunch.core.CorePlugin;
 import com.minebunch.core.storage.database.MongoRequest;
 import com.minebunch.core.utils.TaskUtil;
 import java.util.UUID;
+import lombok.Getter;
 import org.bson.Document;
 
 /**
@@ -15,8 +16,9 @@ import org.bson.Document;
  */
 public abstract class PlayerProfile {
 
-    private UUID id;
-    private String collectionName;
+    @Getter
+    private final UUID id;
+    private final String collectionName;
 
     /**
      * Takes in the UUID of the player and the Mongo collection name to save to and load from
