@@ -48,23 +48,9 @@ public class JedisManager {
         publisher.writeToChannel("core", object);
     }
 
-    @SuppressWarnings("deprecation")
     public void runCommand(JedisCommand redisCommand) {
-        Jedis jedis = pool.getResource();
-
-        try {
+        try (Jedis jedis = pool.getResource()) {
             redisCommand.executeCommand(jedis);
-        } catch (Exception e) {
-            e.printStackTrace();
-
-            if (jedis != null) {
-                pool.returnBrokenResource(jedis);
-                jedis = null;
-            }
-        } finally {
-            if (jedis != null) {
-                pool.returnResource(jedis);
-            }
         }
     }
 }

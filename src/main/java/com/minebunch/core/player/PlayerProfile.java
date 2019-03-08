@@ -2,6 +2,7 @@ package com.minebunch.core.player;
 
 import com.minebunch.core.CorePlugin;
 import com.minebunch.core.storage.database.MongoRequest;
+import com.minebunch.core.utils.TaskUtil;
 import java.util.UUID;
 import org.bson.Document;
 
@@ -33,7 +34,9 @@ public abstract class PlayerProfile {
      */
     public final void load() {
         CorePlugin.getInstance().getMongoStorage().getOrCreateDocument(collectionName, id, (document, exists) -> {
-            if (exists) deserialize(document);
+            if (exists) {
+                deserialize(document);
+            }
             save(false);
         });
     }
@@ -46,8 +49,7 @@ public abstract class PlayerProfile {
     public final void save(boolean async) {
         MongoRequest request = serialize();
         if (async) {
-            CorePlugin.getInstance().getServer().getScheduler()
-                    .runTaskAsynchronously(CorePlugin.getInstance(), request::run);
+            TaskUtil.runAsync(CorePlugin.getInstance(), request::run);
         } else {
             request.run();
         }

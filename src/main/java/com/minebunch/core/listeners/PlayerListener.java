@@ -58,13 +58,6 @@ public class PlayerListener implements Listener {
 
         CorePlugin.getInstance().getUuidCache().write(event.getName(), uuid);
 
-        if (event.getLoginResult() == AsyncPlayerPreLoginEvent.Result.ALLOWED &&
-                (plugin.getPlayerManager().isNameOnline(event.getName())
-                        || plugin.getPlayerManager().getOnlineByIp(address) > 3)) {
-            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Colors.RED + "You're already online!");
-            return;
-        }
-
         if (event.getLoginResult() == AsyncPlayerPreLoginEvent.Result.ALLOWED) {
             plugin.getProfileManager().createProfile(event.getName(), uuid, address.getHostAddress());
         } else if (event.getLoginResult() == AsyncPlayerPreLoginEvent.Result.KICK_FULL) {
@@ -129,6 +122,7 @@ public class PlayerListener implements Listener {
             }
         }
 
+        // TODO: replace LiteBans with punishment system
         if (profile.hasRank(Rank.ADMIN)) {
             addPerm(attachment, "litebans.*");
             addPerm(attachment, "litebans.notify");
@@ -169,9 +163,6 @@ public class PlayerListener implements Listener {
         event.setJoinMessage(null);
 
         Player player = event.getPlayer();
-
-        plugin.getPlayerManager().addPlayer(player);
-
         CoreProfile profile = plugin.getProfileManager().getProfile(player);
 
         plugin.getStaffManager().hideVanishedStaffFromPlayer(player);
@@ -193,8 +184,6 @@ public class PlayerListener implements Listener {
         if (profile == null) {
             return;
         }
-
-        plugin.getPlayerManager().removePlayer(player);
 
         if (profile.hasStaff()) {
             plugin.getStaffManager().removeCachedStaff(profile);

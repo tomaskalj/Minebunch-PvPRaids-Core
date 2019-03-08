@@ -2,6 +2,7 @@ package com.minebunch.core.punishment;
 
 import com.minebunch.core.CorePlugin;
 import com.minebunch.core.storage.database.MongoRequest;
+import com.minebunch.core.utils.TaskUtil;
 import com.minebunch.core.utils.time.TimeUtil;
 import java.sql.Timestamp;
 import java.util.Calendar;
@@ -126,9 +127,9 @@ public class Punishment {
         }
 
         MongoRequest request = MongoRequest.newRequest(collectionName, document);
+
         if (async) {
-            CorePlugin.getInstance().getServer().getScheduler()
-                    .runTaskAsynchronously(CorePlugin.getInstance(), request::run);
+            TaskUtil.runAsync(CorePlugin.getInstance(), request::run);
         } else {
             request.run();
         }

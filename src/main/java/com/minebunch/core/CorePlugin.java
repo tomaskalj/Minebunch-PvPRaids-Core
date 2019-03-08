@@ -33,7 +33,6 @@ import com.minebunch.core.jedis.JedisManager;
 import com.minebunch.core.jedis.cache.UUIDCache;
 import com.minebunch.core.listeners.MessageListener;
 import com.minebunch.core.listeners.PlayerListener;
-import com.minebunch.core.managers.PlayerManager;
 import com.minebunch.core.managers.ProfileManager;
 import com.minebunch.core.managers.ServerManager;
 import com.minebunch.core.managers.StaffManager;
@@ -68,7 +67,6 @@ public class CorePlugin extends JavaPlugin {
     private MongoStorage mongoStorage;
     private ProfileManager profileManager;
     private StaffManager staffManager;
-    private PlayerManager playerManager;
     private ServerManager serverManager;
     private JedisManager jedisManager;
 
@@ -94,7 +92,6 @@ public class CorePlugin extends JavaPlugin {
         mongoStorage = new MongoStorage();
         profileManager = new ProfileManager();
         staffManager = new StaffManager(this);
-        playerManager = new PlayerManager();
         serverManager = new ServerManager();
         jedisManager = new JedisManager();
 
