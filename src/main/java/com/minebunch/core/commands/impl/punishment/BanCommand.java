@@ -8,11 +8,13 @@ import com.minebunch.core.jedis.json.payloads.PayloadType;
 import com.minebunch.core.punishment.Punishment;
 import com.minebunch.core.punishment.PunishmentType;
 import com.minebunch.core.utils.json.JsonChain;
+import org.bson.Document;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.UUID;
 
 public class BanCommand extends BaseCommand {
@@ -65,11 +67,29 @@ public class BanCommand extends BaseCommand {
         punishment.setPunishmentUuid(UUID.randomUUID());
         punishment.setType(PunishmentType.BAN);
         punishment.setTargetUuid(targetUuid);
+        punishment.setTargetName(targetPlayerName);
         punishment.setAddedBy(staffUuid);
         punishment.setAddedReason(reason);
         punishment.setTimestamp(new Timestamp(System.currentTimeMillis()));
         punishment.save(false);
 
+        sendJsonPayload(punishment, staffName, targetPlayerName);
+
+        Document playerDocument = CorePlugin.getInstance().getMongoStorage().getDocumentByFilter("players", "uuid",
+                targetUuid);
+        List<UUID> alts = playerDocument.getList("known_alts", UUID.class);
+
+        // Send a separate payload for each alt, so that all online alts get kicked.
+        for (UUID altUuid : alts){
+            Punishment shared = CorePlugin.getInstance().getPunishmentManager()
+                    .createSharedPunishment(punishment, altUuid);
+            shared.save(false);
+
+            sendJsonPayload(shared, staffName, targetPlayerName);
+        }
+    }
+
+    private void sendJsonPayload(Punishment punishment, String staffName, String targetPlayerName){
         JsonObject data = new JsonChain()
                 .addProperty("punishment_uuid", punishment.getPunishmentUuid().toString())
                 .addProperty("staff_name", staffName)

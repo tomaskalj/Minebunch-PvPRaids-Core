@@ -63,10 +63,11 @@ public class PlayerListener implements Listener {
         CorePlugin.getInstance().getUuidCache().write(event.getName(), uuid);
         CorePlugin.getInstance().getPunishmentManager().loadPunishments(uuid);
 
-        Punishment activeBan = CorePlugin.getInstance().getPunishmentManager().getActiveBan(uuid);
+        Punishment activeBan = CorePlugin.getInstance().getPunishmentManager().getActiveBan(uuid, host);
         if (activeBan != null) {
             event.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_BANNED);
 
+            // Separate messages for direct bans and shared bans
             String message;
             if (activeBan.isShared()) {
                 message = activeBan.getType().getSharedMessage().replace("{player}", activeBan.getAltName());

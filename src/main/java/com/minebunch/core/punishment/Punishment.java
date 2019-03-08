@@ -23,6 +23,8 @@ public class Punishment {
     private UUID punishmentUuid;
     private PunishmentType type;
     private UUID targetUuid;
+    private String targetName;
+    private String targetAddress;
 
     private UUID addedBy;
     private String addedReason;
@@ -83,6 +85,8 @@ public class Punishment {
         this.punishmentUuid = UUID.fromString(document.getString("punishmentUuid"));
         this.type = PunishmentType.valueOf(document.getString("type"));
         this.targetUuid = UUID.fromString(document.getString("target_uuid"));
+        this.targetName = document.getString("target_name");
+        this.targetAddress = document.getString("target_address");
         this.addedReason = document.getString("added_reason");
         this.timestamp = new Timestamp(document.getLong("timestamp"));
         this.hidden = document.getBoolean("hidden");
@@ -111,6 +115,8 @@ public class Punishment {
         document.put("punishment_uuid", this.punishmentUuid.toString());
         document.put("type", this.type.name());
         document.put("target_uuid", this.targetUuid.toString());
+        document.put("target_name", this.targetName);
+        document.put("target_address", this.targetAddress);
         document.put("added_reason", this.addedReason);
         document.put("timestamp", this.timestamp.getTime());
         document.put("hidden", this.hidden);

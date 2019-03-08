@@ -37,8 +37,12 @@ public class PunishmentManager {
         punishmentMap.get(playerUuid).add(punishment);
     }
 
-    public Punishment getActiveBan(UUID playerUuid){
-        return searchPunishment(playerUuid, true);
+    public Punishment getActiveBan(UUID playerUuid, String loginAddress){
+        Punishment ban = searchPunishment(playerUuid, true);
+
+        // If there is no direct ban, check if the address is banned
+        if (ban == null) ban = getActiveAddressBan(playerUuid, loginAddress);
+        return ban;
     }
 
     public Punishment getActiveMute(UUID playerUuid){
@@ -60,5 +64,47 @@ public class PunishmentManager {
             }
         }
         return null;
+    }
+
+    private Set<Punishment> searchPunishmentsByAddress(String address){
+        Set<Punishment> punishments = new HashSet<>();
+        try (MongoCursor<Document> cursor = CorePlugin.getInstance().getMongoStorage()
+                .getDocumentsByFilter("punishments", "target_address", address)){
+
+            cursor.forEachRemaining(document -> { Punishment punishment = new Punishment();
+                punishment.load(document);
+                punishments.add(punishment);
+            });
+        }
+        return punishments;
+    }
+
+    private Punishment getActiveAddressBan(UUID playerUuid, String loginAdress){
+        Set<Punishment> sharedPunishments = searchPunishmentsByAddress(loginAdress);
+        for (Punishment punishment : sharedPunishments) {
+            if (punishment.isBan() && punishment.isActive()){
+                return createSharedPunishment(punishment, playerUuid);
+            }
+        }
+        return null;
+    }
+
+    public Punishment createSharedPunishment(Punishment punishment, UUID altUuid){
+        Punishment sharedPunishment = new Punishment();
+        sharedPunishment.setType(punishment.getType());
+        sharedPunishment.setPunishmentUuid(punishment.getPunishmentUuid());
+        sharedPunishment.setTargetUuid(altUuid);
+        sharedPunishment.setTargetAddress(punishment.getTargetAddress());
+        sharedPunishment.setAddedBy(punishment.getAddedBy());
+        sharedPunishment.setAddedReason(punishment.getAddedReason());
+        sharedPunishment.setRemovedBy(punishment.getRemovedBy());
+        sharedPunishment.setRemoveReason(punishment.getRemoveReason());
+        sharedPunishment.setTimestamp(punishment.getTimestamp());
+        sharedPunishment.setExpiration(punishment.getExpiration());
+        sharedPunishment.setHidden(punishment.isHidden());
+        sharedPunishment.setSilent(punishment.isSilent());
+        sharedPunishment.setAltUuid(punishment.getTargetUuid());
+        sharedPunishment.setAltName(punishment.getTargetName());
+        return sharedPunishment;
     }
 }
