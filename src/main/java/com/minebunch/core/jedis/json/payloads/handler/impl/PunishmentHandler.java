@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class PunishmentHandler implements JsonPayloadHandler{
+public class PunishmentHandler implements JsonPayloadHandler {
 
     @Override
     public void handlePayload(JsonObject object) {
@@ -33,13 +33,15 @@ public class PunishmentHandler implements JsonPayloadHandler{
 
         CorePlugin.getInstance().getPunishmentManager().addPunishment(player.getUniqueId(), punishment);
 
-        if (!punishment.isActive())return;
+        if (!punishment.isActive()) {
+            return;
+        }
         if (punishment.isBan()) {
             // Separate messages for direct bans and shared bans
             String message;
             if (punishment.isShared()) {
                 message = punishment.getType().getSharedMessage().replace("{player}", punishment.getAltName());
-            }else{
+            } else {
                 message = punishment.getType().getMessage();
             }
 

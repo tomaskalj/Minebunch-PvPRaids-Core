@@ -71,7 +71,7 @@ public class PlayerListener implements Listener {
             String message;
             if (activeBan.isShared()) {
                 message = activeBan.getType().getSharedMessage().replace("{player}", activeBan.getAltName());
-            }else{
+            } else {
                 message = activeBan.getType().getMessage();
             }
 

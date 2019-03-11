@@ -28,7 +28,7 @@ public class BanCommand extends BaseCommand {
 
     @Override
     protected void execute(CommandSender sender, String[] args) {
-        if (args.length == 0){
+        if (args.length == 0) {
             sender.sendMessage(USAGE_MESSAGE);
             return;
         }
@@ -36,14 +36,16 @@ public class BanCommand extends BaseCommand {
         String targetPlayerName = args[0];
 
         StringBuilder builder = new StringBuilder("");
-        for (int i = 1; i < args.length; i++){
+        for (int i = 1; i < args.length; i++) {
             builder.append(args[i]);
-            if (i < args.length - 1) builder.append(" ");
+            if (i < args.length - 1) {
+                builder.append(" ");
+            }
         }
         String reason = builder.toString();
 
         UUID targetUuid = CorePlugin.getInstance().getUuidCache().getUuid(targetPlayerName);
-        if (targetUuid == null){
+        if (targetUuid == null) {
             sender.sendMessage(ChatColor.RED + "Could not find that player! Did you type the name correctly?");
             return;
         }
@@ -55,11 +57,11 @@ public class BanCommand extends BaseCommand {
 
         UUID staffUuid;
         String staffName;
-        if (sender instanceof Player){
-            Player player = (Player)sender;
+        if (sender instanceof Player) {
+            Player player = (Player) sender;
             staffName = player.getName();
             staffUuid = player.getUniqueId();
-        }else{
+        } else {
             staffUuid = null;
             staffName = ChatColor.DARK_RED + "Console";
         }
@@ -86,7 +88,7 @@ public class BanCommand extends BaseCommand {
         List<UUID> alts = playerDocument.getList("known_alts", UUID.class);
 
         // Send a separate payload for each alt, so that all online alts get kicked.
-        for (UUID altUuid : alts){
+        for (UUID altUuid : alts) {
             Punishment shared = CorePlugin.getInstance().getPunishmentManager()
                     .createSharedPunishment(punishment, altUuid);
             shared.save(false);
@@ -95,7 +97,7 @@ public class BanCommand extends BaseCommand {
         }
     }
 
-    private void sendJsonPayload(Punishment punishment, String staffName, String targetPlayerName){
+    private void sendJsonPayload(Punishment punishment, String staffName, String targetPlayerName) {
         JsonObject data = new JsonChain()
                 .addProperty("punishment_uuid", punishment.getPunishmentUuid().toString())
                 .addProperty("staff_name", staffName)

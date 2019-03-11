@@ -33,10 +33,10 @@ public class Config {
             try {
                 configFile.createNewFile();
 
-                try (InputStream is = plugin.getClass().getClassLoader().getResourceAsStream(name + ".yml");
-                     OutputStream os = new FileOutputStream(configFile)) {
-                    ByteStreams.copy(is, os);
-                }
+//                try (InputStream is = plugin.getClass().getClassLoader().getResourceAsStream(name + ".yml");
+//                     OutputStream os = new FileOutputStream(configFile)) {
+//                    ByteStreams.copy(is, os);
+//                }
             } catch (IOException ex) {
                 throw new RuntimeException("An error occurred while creating config file", ex);
             }

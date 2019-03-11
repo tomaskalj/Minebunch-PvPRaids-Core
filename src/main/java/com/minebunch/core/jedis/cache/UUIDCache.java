@@ -101,7 +101,9 @@ public class UUIDCache implements JedisCache<String, UUID> {
     }
 
     public void write(String name, UUID uuid) {
-        if (!CorePlugin.getInstance().getJedisManager().isActive()) return;
+        if (!CorePlugin.getInstance().getJedisManager().isActive()) {
+            return;
+        }
 
         nameToUuid.put(name.toLowerCase(), uuid);
         uuidToName.put(uuid, name);

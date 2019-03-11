@@ -27,7 +27,7 @@ public class UnmuteCommand extends BaseCommand {
 
     @Override
     protected void execute(CommandSender sender, String[] args) {
-        if (args.length == 0){
+        if (args.length == 0) {
             sender.sendMessage(USAGE_MESSAGE);
             return;
         }
@@ -35,14 +35,16 @@ public class UnmuteCommand extends BaseCommand {
         String targetPlayerName = args[0];
 
         StringBuilder builder = new StringBuilder("");
-        for (int i = 1; i < args.length; i++){
+        for (int i = 1; i < args.length; i++) {
             builder.append(args[i]);
-            if (i < args.length - 1) builder.append(" ");
+            if (i < args.length - 1) {
+                builder.append(" ");
+            }
         }
         String reason = builder.toString();
 
         UUID targetUuid = CorePlugin.getInstance().getUuidCache().getUuid(targetPlayerName);
-        if (targetUuid == null){
+        if (targetUuid == null) {
             sender.sendMessage(ChatColor.RED + "Could not find that player! Did you type the name correctly?");
             return;
         }
@@ -56,11 +58,10 @@ public class UnmuteCommand extends BaseCommand {
         UUID staffUuid;
         String staffName;
         if (sender instanceof Player) {
-            Player player = (Player)sender;
+            Player player = (Player) sender;
             staffUuid = player.getUniqueId();
             staffName = player.getName();
-        }
-        else {
+        } else {
             staffUuid = null;
             staffName = ChatColor.DARK_RED + "Console";
         }

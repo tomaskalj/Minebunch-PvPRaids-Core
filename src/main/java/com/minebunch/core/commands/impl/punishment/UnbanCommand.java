@@ -17,17 +17,17 @@ import org.bukkit.entity.Player;
 import java.util.List;
 import java.util.UUID;
 
-public class UnbanCommand extends BaseCommand{
+public class UnbanCommand extends BaseCommand {
 
     private static final String USAGE_MESSAGE = ChatColor.RED + "unban <player> [reason] [-s]";
 
-    public UnbanCommand(){
+    public UnbanCommand() {
         super("unban", Rank.LOWEST_STAFF);
     }
 
     @Override
     protected void execute(CommandSender sender, String[] args) {
-        if (args.length == 0){
+        if (args.length == 0) {
             sender.sendMessage(USAGE_MESSAGE);
             return;
         }
@@ -35,31 +35,33 @@ public class UnbanCommand extends BaseCommand{
         String targetPlayerName = args[0];
 
         StringBuilder builder = new StringBuilder("");
-        for (int i = 1; i < args.length; i++){
+        for (int i = 1; i < args.length; i++) {
             builder.append(args[i]);
-            if (i < args.length - 1) builder.append(" ");
+            if (i < args.length - 1) {
+                builder.append(" ");
+            }
         }
         String reason = builder.toString();
 
         UUID targetUuid = CorePlugin.getInstance().getUuidCache().getUuid(targetPlayerName);
-        if (targetUuid == null){
+        if (targetUuid == null) {
             sender.sendMessage(ChatColor.RED + "Could not find that player! Did you type the name correctly?");
             return;
         }
 
         Punishment ban = CorePlugin.getInstance().getPunishmentManager().getActiveBan(targetUuid);
-        if (ban == null){
+        if (ban == null) {
             sender.sendMessage(ChatColor.RED + "This player is not banned!");
             return;
         }
 
         UUID staffUuid;
         String staffName;
-        if (sender instanceof Player){
-            Player player = (Player)sender;
+        if (sender instanceof Player) {
+            Player player = (Player) sender;
             staffName = player.getName();
             staffUuid = player.getUniqueId();
-        }else{
+        } else {
             staffUuid = null;
             staffName = ChatColor.DARK_RED + "Console";
         }
@@ -75,8 +77,9 @@ public class UnbanCommand extends BaseCommand{
 
         String result = reason;
         try (MongoCursor<Document> cursor = CorePlugin.getInstance().getMongoStorage()
-                .getDocumentsByFilter("punishments", "punishment_uuid", ban.getPunishmentUuid())){
-            cursor.forEachRemaining(document -> { Punishment shared = new Punishment();
+                .getDocumentsByFilter("punishments", "punishment_uuid", ban.getPunishmentUuid())) {
+            cursor.forEachRemaining(document -> {
+                Punishment shared = new Punishment();
                 shared.load(document);
                 shared.setRemovedBy(staffUuid);
                 shared.setRemoveReason(result);

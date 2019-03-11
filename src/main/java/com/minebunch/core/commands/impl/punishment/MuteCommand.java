@@ -17,7 +17,7 @@ import org.bukkit.entity.Player;
 import java.sql.Timestamp;
 import java.util.UUID;
 
-public class MuteCommand extends BaseCommand{
+public class MuteCommand extends BaseCommand {
 
     private static final String USAGE_MESSAGE = ChatColor.RED + "mute <player> [time] [reason]";
 
@@ -27,7 +27,7 @@ public class MuteCommand extends BaseCommand{
 
     @Override
     protected void execute(CommandSender sender, String[] args) {
-        if (args.length == 0){
+        if (args.length == 0) {
             sender.sendMessage(USAGE_MESSAGE);
             return;
         }
@@ -36,14 +36,16 @@ public class MuteCommand extends BaseCommand{
         String time = args[1];
 
         StringBuilder builder = new StringBuilder("");
-        for (int i = 2; i < args.length; i++){
+        for (int i = 2; i < args.length; i++) {
             builder.append(args[i]);
-            if (i < args.length - 1) builder.append(" ");
+            if (i < args.length - 1) {
+                builder.append(" ");
+            }
         }
         String reason = builder.toString();
 
         UUID targetUuid = CorePlugin.getInstance().getUuidCache().getUuid(targetPlayerName);
-        if (targetUuid == null){
+        if (targetUuid == null) {
             sender.sendMessage(ChatColor.RED + "Could not find that player! Did you type the name correctly?");
             return;
         }
@@ -63,11 +65,10 @@ public class MuteCommand extends BaseCommand{
         UUID staffUuid;
         String staffName;
         if (sender instanceof Player) {
-            Player player = (Player)sender;
+            Player player = (Player) sender;
             staffUuid = player.getUniqueId();
             staffName = player.getName();
-        }
-        else {
+        } else {
             staffUuid = null;
             staffName = ChatColor.DARK_RED + "Console";
         }

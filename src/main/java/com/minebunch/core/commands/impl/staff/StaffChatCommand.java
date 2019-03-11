@@ -34,7 +34,7 @@ public class StaffChatCommand extends PlayerCommand {
             String message = StringUtil.buildString(args, 0);
 
             plugin.getJedisManager().write(new JsonPayload(PayloadType.STAFF_CHAT, new JsonChain()
-                    .addProperty("server_name", CorePlugin.getInstance().getServerName())
+                    .addProperty("server_name", CorePlugin.getInstance().getCoreConfig().getServerName())
                     .addProperty("player_rank", profile.getRank().getName())
                     .addProperty("player_name", player.getName())
                     .addProperty("message", message)

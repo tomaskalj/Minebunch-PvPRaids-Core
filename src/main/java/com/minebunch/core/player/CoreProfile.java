@@ -87,10 +87,14 @@ public class CoreProfile extends PlayerProfile {
         }
 
         List<String> knownAddresses = document.getList("known_addresses", String.class);
-        if (knownAddresses != null) this.knownAddresses.addAll(knownAddresses);
+        if (knownAddresses != null) {
+            this.knownAddresses.addAll(knownAddresses);
+        }
 
         List<UUID> knownAlts = document.getList("known_alts", UUID.class);
-        if (knownAlts != null) this.knownAlts.addAll(knownAlts);
+        if (knownAlts != null) {
+            this.knownAlts.addAll(knownAlts);
+        }
 
         this.firstLogin = document.getDate("first_login");
         this.lastLogin = document.getDate("last_login");
@@ -132,13 +136,15 @@ public class CoreProfile extends PlayerProfile {
         return String.format(getVisibleRank().getRawFormat(), rankColor) + name;
     }
 
-    private void findAlts(){
+    private void findAlts() {
         if (this.currentAddress != null) {
             try (MongoCursor<Document> cursor = CorePlugin.getInstance().getMongoStorage().getDocumentsByFilter(
                     getCollectionName(), "last_address", currentAddress)) {
                 cursor.forEachRemaining(document -> {
                     UUID uuid = UUID.fromString(document.getString("uuid"));
-                    if (!uuid.equals(id)) knownAlts.add(uuid);
+                    if (!uuid.equals(id)) {
+                        knownAlts.add(uuid);
+                    }
                 });
             }
         }
