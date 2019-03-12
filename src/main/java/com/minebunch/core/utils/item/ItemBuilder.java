@@ -1,11 +1,13 @@
 package com.minebunch.core.utils.item;
 
 import java.util.Arrays;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 public class ItemBuilder {
@@ -73,6 +75,13 @@ public class ItemBuilder {
     public ItemBuilder unbreakable(boolean unbreakable) {
         ItemMeta meta = item.getItemMeta();
         meta.spigot().setUnbreakable(unbreakable);
+        item.setItemMeta(meta);
+        return this;
+    }
+
+    public ItemBuilder dye(Color color) {
+        LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();
+        meta.setColor(color);
         item.setItemMeta(meta);
         return this;
     }
