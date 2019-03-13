@@ -8,15 +8,15 @@ import org.bukkit.entity.Player;
 
 @Getter
 public enum Rank {
-    OWNER("Owner", Colors.D_RED),
-    DEVELOPER("Developer", Colors.AQUA),
+    MANAGER("Manager", Colors.D_RED),
     ADMIN("Admin", Colors.RED),
     MOD("Mod", Colors.PURPLE),
     MEDIA("Media", Colors.PINK),
     SPONSOR("Sponsor", Colors.GOLD),
     MVP("MVP", Colors.BLUE),
     VIP("VIP", Colors.GREEN),
-    MEMBER("Member", Colors.WHITE);
+    MEMBER("Member", Colors.WHITE),
+    NEWBIE("Newbie", Colors.YELLOW);
 
     public static final Rank LOWEST_STAFF = MOD;
     public static final Rank LOWEST_DONOR = VIP;
